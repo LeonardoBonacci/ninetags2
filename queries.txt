@@ -1,29 +1,77 @@
 // USERS PERSPECTIVE
-MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(f:User)-[:SHARED]->(s:Share)
-WHERE user <> f
-WITH user, s
-MATCH (s)-[IS_TOPIC]->(t:Tag)<-[:INTERESTED_IN]-(user)
-RETURN distinct(s), t
+MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)
+WHERE user <> followed
+WITH user, share
+MATCH (share)-[IS_TOPIC]->(:Tag)<-[:INTERESTED_IN]-(user)
+RETURN DISTINCT(share)
+ORDER BY ID(share) DESC
+SKIP 0
+LIMIT 3
 
-MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(f:User)-[:SHARED]->(s:Share)
-WHERE user <> f
-WITH user, s
-OPTIONAL MATCH (s)-[IS_TOPIC]->(:Tag)<-[i:INTERESTED_IN]-(user)
-WITH s, i
-WHERE i IS NULL 
-RETURN s
+MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)
+WHERE user <> followed
+WITH user, share
+OPTIONAL MATCH (share)-[IS_TOPIC]->(:Tag)<-[interest:INTERESTED_IN]-(user)
+WITH share, interest
+WHERE interest IS NULL 
+RETURN DISTINCT(share)
+ORDER BY ID(share) DESC
+SKIP 0
+LIMIT 3
+
+WITH localdatetime() AS now 
+WITH now.day AS day, now.month AS month, now.year AS year 
+MATCH (d:Day)<-[:CHILD]-(m:Month)<-[:CHILD]-(y:Year)
+WHERE d.value = day AND m.value = month AND y.value = year
+WITH d AS today
+MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)-[:AT_TIME]->(today)
+WHERE user <> followed
+WITH share
+MATCH (share)<-[likes:LIKED]-(:User)
+WITH DISTINCT(share) AS shares, COUNT(likes) AS nrLikes
+RETURN shares
+ORDER BY nrLikes DESC
+SKIP 0
+LIMIT 2
 
 
 // TOPIC PERSPECTIVE
-MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(t:Tag)<-[:IS_TOPIC]-(s:Share)
-WITH user, s, t
-MATCH (s)<-[SHARED]->(u:User)<-[:FOLLOWS]-(user)
-WHERE user <> u
-RETURN DISTINCT(s), u, t
+MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(:Tag)<-[:IS_TOPIC]-(share:Share)
+WITH user, share
+MATCH (share)<-[:SHARED]-(followed:User)<-[:FOLLOWS]-(user)
+WHERE user <> followed
+RETURN DISTINCT(share)
+ORDER BY ID(share) DESC
+SKIP 0
+LIMIT 3
 
-MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(t:Tag)<-[:IS_TOPIC]-(s:Share)
-WITH user, s, t
-OPTIONAL MATCH (s)<-[SHARED]-(:User)<-[f:FOLLOWS]-(user)
-WITH s, f
-WHERE f IS NULL 
-RETURN s
+MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(:Tag)<-[:IS_TOPIC]-(share:Share)
+WITH user, share
+OPTIONAL MATCH (share)<-[SHARED]-(followed:User)<-[follows:FOLLOWS]-(user)
+WHERE user <> followed
+WITH share, follows
+WHERE follows IS NULL 
+RETURN DISTINCT(share)
+ORDER BY ID(share) DESC
+SKIP 0
+LIMIT 3
+
+WITH localdatetime() AS now 
+WITH now.day AS day, now.month AS month, now.year AS year 
+MATCH (d:Day)<-[:CHILD]-(m:Month)<-[:CHILD]-(y:Year)
+WHERE d.value = day AND m.value = month AND y.value = year
+WITH d AS today
+MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(:Tag)<-[:IS_TOPIC]-(share:Share)-[:AT_TIME]->(today)
+WITH share
+MATCH (share)<-[likes:LIKED]-(:User)
+WITH DISTINCT(share) AS shares, COUNT(likes) AS nrLikes
+RETURN shares
+ORDER BY nrLikes DESC
+SKIP 0
+LIMIT 2
+
+
+
+
+
+

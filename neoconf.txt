@@ -1,0 +1,40 @@
+ Comma separated list of JAX-RS packages containing JAX-RS resources, one
+# package name for each mountpoint. The listed package names will be loaded
+# under the mountpoints specified. Uncomment this line to mount the
+# org.neo4j.examples.server.unmanaged.HelloWorldResource.java from
+# neo4j-server-examples under /examples/unmanaged, resulting in a final URL of
+# http://localhost:7474/examples/unmanaged/helloworld/{nodeId}
+#dbms.unmanaged_extension_classes=org.neo4j.examples.server.unmanaged=/examples/unmanaged
+dbms.unmanaged_extension_classes=com.graphaware.server=/graphaware
+
+
+# Runtime must be enabled like this
+com.graphaware.runtime.enabled=true
+
+# A Runtime module that takes care of attaching the events like this (TT is the ID of the module)
+com.graphaware.module.TT.1=com.graphaware.module.timetree.module.TimeTreeModuleBootstrapper
+
+# autoAttach must be set to true
+com.graphaware.module.TT.autoAttach=true
+
+# Optionally, nodes which represent events and should be attached automatically have to be defined (defaults to nodes with label Event)
+com.graphaware.module.TT.event=hasLabel('Share')
+
+# Optionally, a property on the event nodes that represents the the time (long) at which the event took place must be specified (defaults to "timestamp")
+com.graphaware.module.TT.timestamp=time
+
+# Optionally, a property on the event nodes that represents the node ID (long) of the root node for the tree, to which the event should be attached (defaults to "timeTreeRootId")
+com.graphaware.module.TT.customTimeTreeRootProperty=rootId
+
+# Optionally, a time zone can be specified (defaults to UTC)
+com.graphaware.module.TT.timezone=GMT+2
+db.temporal.timezone=+02:00
+
+# Optionally, a relationship direction (from the tree's point of view), with which the events will be attached to the tree can be specified (defaults to INCOMING)
+com.graphaware.module.TT.direction=INCOMING
+
+
+# A comma separated list of procedures and user defined functions that are allowed
+# full access to the database through unsupported/insecure internal APIs.
+#dbms.security.procedures.unrestricted=my.extensions.example,my.procedures.*
+dbms.security.procedures.unrestricted=ga.timetree.*
