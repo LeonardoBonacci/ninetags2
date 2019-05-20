@@ -19,11 +19,8 @@ ORDER BY ID(share) DESC
 SKIP 0
 LIMIT 3
 
-WITH localdatetime() AS now 
-WITH now.day AS day, now.month AS month, now.year AS year 
-MATCH (d:Day)<-[:CHILD]-(m:Month)<-[:CHILD]-(y:Year)
-WHERE d.value = day AND m.value = month AND y.value = year
-WITH d AS today
+CALL ga.timetree.now({}) 
+YIELD instant as today
 MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)-[:AT_TIME]->(today)
 WHERE user <> followed
 WITH share
@@ -56,11 +53,8 @@ ORDER BY ID(share) DESC
 SKIP 0
 LIMIT 3
 
-WITH localdatetime() AS now 
-WITH now.day AS day, now.month AS month, now.year AS year 
-MATCH (d:Day)<-[:CHILD]-(m:Month)<-[:CHILD]-(y:Year)
-WHERE d.value = day AND m.value = month AND y.value = year
-WITH d AS today
+CALL ga.timetree.now({}) 
+YIELD instant as today
 MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(:Tag)<-[:IS_TOPIC]-(share:Share)-[:AT_TIME]->(today)
 WITH share
 MATCH (share)<-[likes:LIKED]-(:User)
@@ -72,6 +66,7 @@ LIMIT 2
 
 
 
-
-
-
+// USEFULL
+CALL dbms.procedures() YIELD name, signature
+WHERE name='dbms.listConfig'
+RETURN signature

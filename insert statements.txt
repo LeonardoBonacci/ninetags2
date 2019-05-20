@@ -97,6 +97,6 @@ MERGE (z)-[:SHARED]->(s8:Share { url: 'https://www.youtube.com/channel/UCBOjaoOQ
 MERGE (ez)-[:SHARED]->(s9:Share { url: 'https://www.allrecipes.com/recipes/1642/everyday-cooking/', time: timestamp() })-[:IS_TOPIC]->(co)
 MERGE (ome)-[:SHARED]->(s10:Share { url: 'https://www.khanacademy.org/test-prep/mcat/society-and-culture/culture/a/cultural-relativism-article', time: timestamp() })-[:IS_TOPIC]->(cu)
 
-MERGE (ep)-[:LIKED {time: timestamp()}]->(s1)
-MERGE (i)-[:LIKED {time: timestamp()}]->(s1)
-MERGE (ph)-[:LIKED {time: timestamp()}]->(s2)
+MERGE (ep)-[:LIKED {when: timestamp()}]->(s1)
+MERGE (i)-[:LIKED {when: timestamp()}]->(s1)
+MERGE (ph)-[:LIKED {when: timestamp()}]->(s2)
