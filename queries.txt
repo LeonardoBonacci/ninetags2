@@ -24,6 +24,14 @@ SKIP 0
 LIMIT 9
 
 
+// SENT-ITEMS: SHARED BY ME
+MATCH (user:User {name:'Alpha'})-[:SHARED]->(share:Share)
+RETURN share
+ORDER BY ID(share) DESC
+SKIP 0
+LIMIT 9
+
+
 // POCKET: SHARED WITH MYSELF
 MATCH (user:User {name:'Alpha'})<-[:SHARED_WITH]-(share:Share)<-[:SHARED]-(sharer:User)
 WHERE user = sharer
