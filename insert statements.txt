@@ -97,6 +97,7 @@ MERGE (ep)-[:SHARED]->(s7:Share { url: 'https://en.wikipedia.org/wiki/Cooking', 
 MERGE (z)-[:SHARED]->(s8:Share { url: 'https://www.youtube.com/channel/UCBOjaoOQgIJiV0itcGQIMJQ', time: timestamp() })-[:IS_TOPIC]->(co)
 MERGE (ez)-[:SHARED]->(s9:Share { url: 'https://www.allrecipes.com/recipes/1642/everyday-cooking/', time: timestamp() })-[:IS_TOPIC]->(co)
 MERGE (ome)-[:SHARED]->(s10:Share { url: 'https://www.khanacademy.org/test-prep/mcat/society-and-culture/culture/a/cultural-relativism-article', time: timestamp() })-[:IS_TOPIC]->(cu)
+MERGE (a)-[:SHARED]->(s11:Share { url: 'https://www.health.com/', time: timestamp() })-[:IS_TOPIC]->(he)
 
 MERGE (adam:Location {name : "Amsterdam", longitude : 4.8936041, latitude : 52.3727598 })
 MERGE (boek:Location {name : "Boekelo", longitude : 6.7994207, latitude : 52.204006 })
@@ -117,6 +118,12 @@ MERGE (s3)-[:AVAILABLE_DURING]->(:Interval {from: timestamp() })
 MERGE (s4)-[:AVAILABLE_DURING]->(:Interval {from: timestamp(), until: timestamp() + 1000000 })
 MERGE (s5)-[:AVAILABLE_DURING]->(:Interval {from: timestamp(), until: timestamp()})
 MERGE (s6)-[:AVAILABLE_DURING]->(:Interval {from: timestamp(), until: timestamp() + 1000000 })
+
+MERGE (s7)-[:SHARED_WITH]->(a)
+MERGE (s8)-[:SHARED_WITH]->(a)
+MERGE (s9)-[:SHARED_WITH]->(a)
+MERGE (s10)-[:SHARED_WITH]->(a)
+MERGE (s11)-[:SHARED_WITH]->(a)
 
 MERGE (ep)-[:LIKED {when: timestamp()}]->(s1)
 MERGE (i)-[:LIKED {when: timestamp()}]->(s1)
