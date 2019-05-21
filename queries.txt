@@ -1,3 +1,21 @@
+// LIST FOLLOWED USERS
+MATCH (user:User {name:'Alpha'})-[follows:FOLLOWS]->(followed:User)
+WHERE user <> followed
+RETURN followed
+ORDER BY follows.prio
+SKIP 0
+LIMIT 9
+
+
+// LIST INTERESTED TOPICS
+MATCH (user:User {name:'Alpha'})-[interest:INTERESTED_IN]->(t:Tag)
+WITH interest, t
+RETURN t
+ORDER BY interest.prio
+SKIP 0
+LIMIT 9
+
+
 // USERS PERSPECTIVE
 MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)
 WHERE user <> followed
@@ -64,9 +82,17 @@ ORDER BY nrLikes DESC
 SKIP 0
 LIMIT 2
 
+// SPACE TIME SEARCH
+MATCH (share:Share)-[available:AVAILABLE_AT]->(shareLoc:Location)
+WITH share, point({ longitude: 5.1859604, latitude: 52.037247 }) AS here, point({ longitude: shareLoc.longitude, latitude: shareLoc.latitude }) AS there
+WHERE toInteger(distance(here, there)/1000) < available.radius
+RETURN share
+ORDER BY ID(share) DESC
 
 
 // USEFULL
 CALL dbms.procedures() YIELD name, signature
 WHERE name='dbms.listConfig'
 RETURN signature
+
+match (n) detach delete n
