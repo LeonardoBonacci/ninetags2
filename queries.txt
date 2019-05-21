@@ -83,9 +83,10 @@ SKIP 0
 LIMIT 2
 
 // SPACE TIME SEARCH
-MATCH (share:Share)-[available:AVAILABLE_AT]->(shareLoc:Location)
+MATCH (share:Share)-[availableAt:AVAILABLE_AT]->(shareLoc:Location), (share)-[:AVAILABLE_DURING]->(sharedTime:Interval)
 WITH share, point({ longitude: 5.1859604, latitude: 52.037247 }) AS here, point({ longitude: shareLoc.longitude, latitude: shareLoc.latitude }) AS there
-WHERE toInteger(distance(here, there)/1000) < available.radius
+WHERE toInteger(distance(here, there)/1000) < availableAt.radius
+AND (sharedTime.from IS NULL OR timestamp() > sharedTime.from) AND (sharedTime.until IS NULL OR timestamp() < sharedTime.until)
 RETURN share
 ORDER BY ID(share) DESC
 
