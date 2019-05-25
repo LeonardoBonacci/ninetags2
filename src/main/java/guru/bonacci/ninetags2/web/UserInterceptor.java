@@ -20,8 +20,6 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
 		
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
-    	log.error(request.getServletPath());
-
     	// leave swagger alone...
     	if (request.getServletPath().contains("swagger")) return true;
     	

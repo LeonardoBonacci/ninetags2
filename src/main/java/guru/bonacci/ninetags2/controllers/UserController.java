@@ -2,28 +2,54 @@ package guru.bonacci.ninetags2.controllers;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import guru.bonacci.ninetags2.domain._User;
+import guru.bonacci.ninetags2.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 @Api(value = "Followed users", description = "Offers followed user services")
 public class UserController {
 
+	private final UserService service;
+	
+	
+	@ApiOperation(value = "Get the user")
+    @GetMapping("/{name}")
+    public CompletableFuture<ResponseEntity<?>> getByName(@PathVariable("name") String name) {
+		return service.getByName(name)
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
+    }
 
+    private static Function<Throwable, ResponseEntity<?>> handleFailure = throwable -> {
+        log.error("Unable to retrieve shares", throwable);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    };
+
+	
 	@ApiOperation(value = "Get followers, for mailing service")
     @GetMapping("/followers")
     public CompletableFuture<ResponseEntity<?>> getFollowers() {
-    	return null;
+		return service.getFollowers()
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
     }
 
     @ApiOperation(value = "add user to follow")
