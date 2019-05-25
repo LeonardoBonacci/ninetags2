@@ -28,19 +28,19 @@ public class PagedShareController {
 
 	@ApiOperation(value = "Mailing: sent-items")
     @GetMapping("/sent")
-    public CompletableFuture<ResponseEntity<?>> getPrivatelySentShares(final _User user, final Pageable pageable) {
+    public CompletableFuture<ResponseEntity<?>> getPrivatelySentShares(final Pageable pageable) {
     	return null;
     }
 
 	@ApiOperation(value = "Mailing: inbox")
     @GetMapping("/inbox")
-    public CompletableFuture<ResponseEntity<?>> getPrivatelyReceivedShares(final _User user, final Pageable pageable) {
+    public CompletableFuture<ResponseEntity<?>> getPrivatelyReceivedShares(final Pageable pageable) {
     	return null;
     }
 
 	@ApiOperation(value = "Most liked shares today")
     @GetMapping("/hot")
-    public CompletableFuture<ResponseEntity<?>> getHotShares(final _User user, final Pageable pageable) {
+    public CompletableFuture<ResponseEntity<?>> getHotShares(final Pageable pageable) {
     	return null;
     }
 

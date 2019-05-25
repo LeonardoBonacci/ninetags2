@@ -25,7 +25,7 @@ public class PagedUserController {
     	return null;
     }
 
-	@ApiOperation(value = "Most liked users")
+	@ApiOperation(value = "Hall of fame.. most liked users today")
     @GetMapping("/hot")
     public CompletableFuture<ResponseEntity<?>> getHotUsers(final Pageable pageable) {
     	return null;
