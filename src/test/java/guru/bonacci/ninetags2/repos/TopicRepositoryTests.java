@@ -62,9 +62,11 @@ public class TopicRepositoryTests {
 		
 		results = trepo.getFollowed(name, PageRequest.of(1, 9)).get();
 		assertEquals(1, results.getNumberOfElements());
+		assertEquals("Sports", results.get().findFirst().get().getName()); //last added has highest prio
 
 		results = trepo.getFollowed(name, PageRequest.of(2, 9)).get();
 		assertEquals(0, results.getNumberOfElements());
+		
 	}
 
 }

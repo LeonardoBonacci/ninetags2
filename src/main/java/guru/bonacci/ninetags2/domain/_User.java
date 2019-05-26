@@ -1,7 +1,5 @@
 package guru.bonacci.ninetags2.domain;
 
-import static java.util.Arrays.asList;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 @Getter
@@ -33,17 +32,28 @@ public class _User {
 
 	@Relationship(type = "FOLLOWS")
 	@Builder.Default 
-	private List<_User> follows = new ArrayList<>();
+	private List<Follows> follows = new ArrayList<>();
 
 	@Relationship(type = "INTERESTED_IN")
 	@Builder.Default 
-	private List<Topic> interests = new ArrayList<>();
+	private List<Interests> interests = new ArrayList<>();
 	
-	public void addFollows(_User... followUs) {
-		this.follows.addAll(asList(followUs));
+
+	public void addFollows(@NonNull _User... followUs) {
+		for (_User followMe : followUs)
+			addFollow(followMe);
 	}	
-	
-	public void addInterests(Topic... interests) {
-		this.interests.addAll(asList(interests));
+
+	private void addFollow(@NonNull _User followMe) {
+		this.follows.add(Follows.builder().follower(this).followed(followMe).prio(this.follows.size()).build());
+	}	
+
+	public void addInterests(@NonNull Topic... followUs) {
+		for (Topic followMe : followUs)
+			addInterest(followMe);
+	}	
+
+	private void addInterest(@NonNull Topic followMe) {
+		this.interests.add(Interests.builder().follower(this).followed(followMe).prio(this.interests.size()).build());
 	}	
 }

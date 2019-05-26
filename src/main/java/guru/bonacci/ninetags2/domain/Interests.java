@@ -16,10 +16,10 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-@RelationshipEntity(type = "FOLLOWS")
+@RelationshipEntity(type = "INTERESTED_IN")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Follows {
+public class Interests {
 
 	@Id @GeneratedValue
 	private Long id;
@@ -31,5 +31,5 @@ public class Follows {
 	private _User  follower;
 	
 	@EndNode 
-	private _User followed;
+	private Topic followed;
 }
