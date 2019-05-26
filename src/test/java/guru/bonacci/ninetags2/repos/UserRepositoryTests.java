@@ -1,5 +1,6 @@
 package guru.bonacci.ninetags2.repos;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
@@ -11,10 +12,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.assertEquals;
 import guru.bonacci.ninetags2.domain._User;
 
 @RunWith(SpringRunner.class)
@@ -30,28 +32,52 @@ public class UserRepositoryTests {
 	public void setUp() {
 		repo.deleteAll();
 	
-		_User gamma = _User.builder().name("Gamma").build();
-		_User beta = _User.builder().name("Beta").build();
-		beta.addFollows(gamma);
 		_User alpha = _User.builder().name("Alpha").build();
-		alpha.addFollows(beta);
-		
-		repo.saveAll(Arrays.asList(alpha, beta, gamma));
+		_User beta = _User.builder().name("Beta").build();
+		_User gamma = _User.builder().name("Gamma").build();
+		_User delta = _User.builder().name("Delta").build();
+		_User epsilon = _User.builder().name("Epsilon").build();
+		_User zeta = _User.builder().name("Zeta").build();
+		_User eta = _User.builder().name("Eta").build();
+		_User theta = _User.builder().name("Theta").build();
+		_User iota = _User.builder().name("Iota").build();
+		_User kappa = _User.builder().name("Kappa").build();
+		_User lambda = _User.builder().name("Lambda").build();
+		_User mu = _User.builder().name("Mu").build();
+		_User nu = _User.builder().name("Nu").build();
+
+		alpha.addFollows(beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu);
+		beta.addFollows(gamma);
+		repo.saveAll(Arrays.asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
 	}
 
 	@Test
-	public void testFindByName() throws InterruptedException, ExecutionException {
+	public void testGetByName() throws InterruptedException, ExecutionException {
 		String name = "Alpha";
 		_User result = repo.findByName(name).get();
 		assertNotNull(result);
 	}
 	
 	@Test
-	public void testFindByFollowers() throws InterruptedException, ExecutionException {
+	public void testGetFollowers() throws InterruptedException, ExecutionException {
 		String name = "Alpha";
-		List<_User> results = repo.findFollowers(name).get();
-		assertNotNull(results);
-		assertEquals(1, results.size());
-		assertEquals("Beta", results.get(0).getName());
+		List<_User> results = repo.getFollowers(name).get();
+		assertEquals(11, results.size());
 	}
+	
+	@Test
+	public void testGetFollowersPaged() throws InterruptedException, ExecutionException {
+		String name = "Alpha";
+		Page<_User> results = repo.getFollowers(name, PageRequest.of(0, 9)).get();
+		assertEquals(9, results.getNumberOfElements());
+		assertEquals(11, results.getTotalElements());
+		
+		results = repo.getFollowers(name, PageRequest.of(1, 9)).get();
+		assertEquals(2, results.getNumberOfElements());
+
+		results = repo.getFollowers(name, PageRequest.of(2, 9)).get();
+		assertEquals(0, results.getNumberOfElements());
+
+	}
+
 }

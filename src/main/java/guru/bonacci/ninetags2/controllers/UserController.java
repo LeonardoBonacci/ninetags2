@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -35,21 +35,15 @@ public class UserController {
     public CompletableFuture<ResponseEntity<?>> getByName(@PathVariable("name") String name) {
 		return service.getByName(name)
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
-		        .exceptionally(handleFailure);
+		        .exceptionally(WebHelper.handleFailure);
     }
-
-    private static Function<Throwable, ResponseEntity<?>> handleFailure = throwable -> {
-        log.error("Unable to retrieve shares", throwable);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    };
-
 	
 	@ApiOperation(value = "Get followers, for mailing service")
     @GetMapping("/followers")
     public CompletableFuture<ResponseEntity<?>> getFollowers() {
 		return service.getFollowers()
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
-		        .exceptionally(handleFailure);
+		        .exceptionally(WebHelper.handleFailure);
     }
 
     @ApiOperation(value = "add user to follow")

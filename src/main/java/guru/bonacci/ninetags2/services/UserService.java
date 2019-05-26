@@ -3,6 +3,8 @@ package guru.bonacci.ninetags2.services;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +31,14 @@ public class UserService {
 	
 	@Transactional(readOnly = true)
 	public CompletableFuture<List<_User>> getFollowers() {
-		CompletableFuture<List<_User>> followers = repo.findFollowers(context.getAuthentication());
+		CompletableFuture<List<_User>> followers = repo.getFollowers(context.getAuthentication());
 		return followers.whenComplete((results, ex) -> results.forEach(result -> log.info("found follower " + result)));
+	}
+
+	@Transactional(readOnly = true)
+	public CompletableFuture<Page<_User>> getFollowers(final Pageable page) {
+		CompletableFuture<Page<_User>> followers = repo.getFollowers(context.getAuthentication(), page);
+		return followers.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found follower " + result)));
 	}
 
 }

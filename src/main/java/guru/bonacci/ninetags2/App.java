@@ -21,17 +21,28 @@ public class App {
 	}
 
 	@Bean
-	CommandLineRunner init(UserRepository userRepo) {
+	CommandLineRunner init(UserRepository repo) {
 		return args -> {
-			userRepo.deleteAll();
+			repo.deleteAll();
 			
-			_User gamma = _User.builder().name("Gamma").build();
-			_User beta = _User.builder().name("Beta").build();
-			beta.addFollows(gamma);
 			_User alpha = _User.builder().name("Alpha").build();
-			alpha.addFollows(beta);
-			
-			userRepo.saveAll(Arrays.asList(alpha, beta, gamma));		};
+			_User beta = _User.builder().name("Beta").build();
+			_User gamma = _User.builder().name("Gamma").build();
+			_User delta = _User.builder().name("Delta").build();
+			_User epsilon = _User.builder().name("Epsilon").build();
+			_User zeta = _User.builder().name("Zeta").build();
+			_User eta = _User.builder().name("Eta").build();
+			_User theta = _User.builder().name("Theta").build();
+			_User iota = _User.builder().name("Iota").build();
+			_User kappa = _User.builder().name("Kappa").build();
+			_User lambda = _User.builder().name("Lambda").build();
+			_User mu = _User.builder().name("Mu").build();
+			_User nu = _User.builder().name("Nu").build();
+
+			alpha.addFollows(beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu);
+			beta.addFollows(gamma);
+			repo.saveAll(Arrays.asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
+		};
 	}
 	
 	// Functionalities
