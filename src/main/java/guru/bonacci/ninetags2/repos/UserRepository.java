@@ -1,6 +1,7 @@
 package guru.bonacci.ninetags2.repos;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import guru.bonacci.ninetags2.domain._User;
 public interface UserRepository extends Neo4jRepository<_User, Long> {
 
 	@Depth(value = 0)
-	CompletableFuture<_User> findByName(String name);
+	CompletableFuture<Optional<_User>> findByName(String name);
 
 	// Possibly includes the user himself
 	@Depth(value = 0)

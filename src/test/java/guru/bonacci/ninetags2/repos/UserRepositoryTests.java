@@ -54,7 +54,7 @@ public class UserRepositoryTests {
 	@Test
 	public void testGetByName() throws InterruptedException, ExecutionException {
 		String name = "Alpha";
-		_User result = repo.findByName(name).get();
+		_User result = repo.findByName(name).get().get();
 		assertNotNull(result);
 	}
 	

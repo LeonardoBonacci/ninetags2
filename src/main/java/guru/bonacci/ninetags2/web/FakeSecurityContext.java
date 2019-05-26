@@ -7,5 +7,5 @@ import lombok.Setter;
 @Getter
 public class FakeSecurityContext {
 
-	public String authentication;
+	private String authentication;
 }

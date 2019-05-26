@@ -8,8 +8,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import guru.bonacci.ninetags2.domain.Share;
+import guru.bonacci.ninetags2.domain.SharedWith;
 import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.domain._User;
+import guru.bonacci.ninetags2.repos.ShareRepository;
+import guru.bonacci.ninetags2.repos.SharedWithRepository;
 import guru.bonacci.ninetags2.repos.TopicRepository;
 import guru.bonacci.ninetags2.repos.UserRepository;
 
@@ -23,7 +27,7 @@ public class App {
 	}
 
 	@Bean
-	CommandLineRunner init(UserRepository urepo, TopicRepository trepo) {
+	CommandLineRunner init(UserRepository urepo, TopicRepository trepo, ShareRepository srepo, SharedWithRepository swrepo) {
 		return args -> {
 			trepo.deleteAll();
 			
@@ -60,6 +64,26 @@ public class App {
 			alpha.addInterests(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports);
 			beta.addFollows(gamma);
 			urepo.saveAll(Arrays.asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
+
+			Share sculture = Share.builder().title("On Culture").by(alpha).build();
+			Share scooking = Share.builder().title("On Cooking").by(alpha).build();
+			Share shobbies = Share.builder().title("On Hobbies").by(alpha).build();
+			Share sliterature = Share.builder().title("On Literature").by(alpha).build();
+			Share sart = Share.builder().title("On Art").by(alpha).build();
+			Share sentertainment = Share.builder().title("On Entertainment").by(alpha).build();
+			Share sfiction = Share.builder().title("On Fiction").by(alpha).build();
+			Share sgame = Share.builder().title("On Game").by(alpha).build();
+			Share spoetry = Share.builder().title("On Poetry").by(alpha).build();
+			Share ssports = Share.builder().title("On Sports").by(alpha).build();
+			Share sdance = Share.builder().title("On Dance").by(alpha).build();
+			srepo.saveAll(Arrays.asList(sculture, scooking, shobbies, sliterature, sart, sentertainment, sfiction, sgame, spoetry, ssports, sdance));
+
+			SharedWith swculture = SharedWith.builder().share(sculture).with(alpha).build();
+			SharedWith swcooking = SharedWith.builder().share(scooking).with(alpha).build();
+			SharedWith swhobbies = SharedWith.builder().share(shobbies).with(alpha).build();
+			SharedWith swliterature = SharedWith.builder().share(sliterature).with(beta).build();
+
+			swrepo.saveAll(Arrays.asList(swculture, swcooking, swhobbies, swliterature));
 		};
 	}
 	

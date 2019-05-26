@@ -3,6 +3,7 @@ package guru.bonacci.ninetags2.domain;
 import org.neo4j.ogm.annotation.EndNode;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
@@ -24,7 +25,7 @@ public class Follows {
 	@Id @GeneratedValue
 	private Long id;
 
-	@Property 
+	@Property @Index 
 	private Integer prio;
 
 	@StartNode 

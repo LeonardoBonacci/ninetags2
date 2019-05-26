@@ -1,8 +1,10 @@
 package guru.bonacci.ninetags2.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import org.neo4j.graphdb.security.AuthorizationViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,11 +26,14 @@ public class UserService {
 	
 
 	@Transactional(readOnly = true)
-	public CompletableFuture<_User> getByName(String name) {
-		CompletableFuture<_User> user = repo.findByName(name);
-		return user.whenComplete((result, ex) -> log.info("found user " + result));
+	public CompletableFuture<Optional<_User>> getByName(String name) {
+		if (!name.equalsIgnoreCase(context.getAuthentication()))
+			throw new AuthorizationViolationException("No permission..");
+		
+		CompletableFuture<Optional<_User>> user = repo.findByName(name);
+		return user.whenComplete((result, ex) -> result.ifPresent(us -> log.info("found user " + us)));
 	}
-	
+
 	@Transactional(readOnly = true)
 	public CompletableFuture<List<_User>> getFollowed() {
 		CompletableFuture<List<_User>> followed = repo.getFollowed(context.getAuthentication());
