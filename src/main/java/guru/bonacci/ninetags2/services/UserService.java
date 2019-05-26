@@ -30,15 +30,15 @@ public class UserService {
 	}
 	
 	@Transactional(readOnly = true)
-	public CompletableFuture<List<_User>> getFollowers() {
-		CompletableFuture<List<_User>> followers = repo.getFollowers(context.getAuthentication());
-		return followers.whenComplete((results, ex) -> results.forEach(result -> log.info("found follower " + result)));
+	public CompletableFuture<List<_User>> getFollowed() {
+		CompletableFuture<List<_User>> followed = repo.getFollowed(context.getAuthentication());
+		return followed.whenComplete((results, ex) -> results.forEach(result -> log.info("found followed user " + result)));
 	}
 
 	@Transactional(readOnly = true)
-	public CompletableFuture<Page<_User>> getFollowers(final Pageable page) {
-		CompletableFuture<Page<_User>> followers = repo.getFollowers(context.getAuthentication(), page);
-		return followers.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found follower " + result)));
+	public CompletableFuture<Page<_User>> getFollowed(final Pageable page) {
+		CompletableFuture<Page<_User>> followed = repo.getFollowed(context.getAuthentication(), page);
+		return followed.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found followed user " + result)));
 	}
 
 }

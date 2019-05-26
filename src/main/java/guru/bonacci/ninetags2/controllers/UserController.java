@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import guru.bonacci.ninetags2.domain._User;
 import guru.bonacci.ninetags2.services.UserService;
+import guru.bonacci.ninetags2.web.Whelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -35,15 +36,15 @@ public class UserController {
     public CompletableFuture<ResponseEntity<?>> getByName(@PathVariable("name") String name) {
 		return service.getByName(name)
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
-		        .exceptionally(WebHelper.handleFailure);
+		        .exceptionally(Whelper.handleFailure);
     }
 	
 	@ApiOperation(value = "Get followers, for mailing service")
     @GetMapping("/followers")
     public CompletableFuture<ResponseEntity<?>> getFollowers() {
-		return service.getFollowers()
+		return service.getFollowed()
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
-		        .exceptionally(WebHelper.handleFailure);
+		        .exceptionally(Whelper.handleFailure);
     }
 
     @ApiOperation(value = "add user to follow")

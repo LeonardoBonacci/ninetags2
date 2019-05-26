@@ -59,25 +59,24 @@ public class UserRepositoryTests {
 	}
 	
 	@Test
-	public void testGetFollowers() throws InterruptedException, ExecutionException {
+	public void testGetFollowed() throws InterruptedException, ExecutionException {
 		String name = "Alpha";
-		List<_User> results = repo.getFollowers(name).get();
+		List<_User> results = repo.getFollowed(name).get();
 		assertEquals(11, results.size());
 	}
 	
 	@Test
-	public void testGetFollowersPaged() throws InterruptedException, ExecutionException {
+	public void testGetFollowedPaged() throws InterruptedException, ExecutionException {
 		String name = "Alpha";
-		Page<_User> results = repo.getFollowers(name, PageRequest.of(0, 9)).get();
+		Page<_User> results = repo.getFollowed(name, PageRequest.of(0, 9)).get();
 		assertEquals(9, results.getNumberOfElements());
 		assertEquals(11, results.getTotalElements());
 		
-		results = repo.getFollowers(name, PageRequest.of(1, 9)).get();
+		results = repo.getFollowed(name, PageRequest.of(1, 9)).get();
 		assertEquals(2, results.getNumberOfElements());
 
-		results = repo.getFollowers(name, PageRequest.of(2, 9)).get();
+		results = repo.getFollowed(name, PageRequest.of(2, 9)).get();
 		assertEquals(0, results.getNumberOfElements());
-
 	}
 
 }

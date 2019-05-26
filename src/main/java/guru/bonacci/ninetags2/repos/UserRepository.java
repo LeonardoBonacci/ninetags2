@@ -23,7 +23,7 @@ public interface UserRepository extends Neo4jRepository<_User, Long> {
 	@Depth(value = 0)
 	@Query( "MATCH (User {name:{name}})-[:FOLLOWS]->(followed:User) " + 
 			"RETURN followed")
-	CompletableFuture<List<_User>> getFollowers(@Param("name") String name);
+	CompletableFuture<List<_User>> getFollowed(@Param("name") String name);
 	
 	@Depth(value = 0)
 	@Query(value = "MATCH (user:User {name:{name}})-[follows:FOLLOWS]->(followed:User) " + 
@@ -33,6 +33,6 @@ public interface UserRepository extends Neo4jRepository<_User, Long> {
 		   countQuery = "MATCH (user:User {name:{name}})-[follows:FOLLOWS]->(followed:User) " + 
 					"WHERE user <> followed " + 
 					"RETURN COUNT(followed) " )
-	CompletableFuture<Page<_User>> getFollowers(@Param("name") String name, Pageable pageable);
+	CompletableFuture<Page<_User>> getFollowed(@Param("name") String name, Pageable pageable);
 
 }

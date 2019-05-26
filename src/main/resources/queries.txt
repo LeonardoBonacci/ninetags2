@@ -1,12 +1,3 @@
-// LIST INTERESTED TOPICS
-MATCH (user:User {name:'Alpha'})-[interest:INTERESTED_IN]->(t:Tag)
-WITH interest, t
-RETURN t
-ORDER BY interest.prio
-SKIP 0
-LIMIT 9
-
-
 // INBOX: SHARED WITH ME
 MATCH (user:User {name:'Alpha'})<-[:SHARED_WITH]-(share:Share)
 RETURN share

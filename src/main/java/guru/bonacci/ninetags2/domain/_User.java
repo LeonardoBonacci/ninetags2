@@ -11,8 +11,6 @@ import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,13 +31,19 @@ public class _User {
 	@Index(unique=true) 
 	private String name;
 
-	@JsonIgnore
 	@Relationship(type = "FOLLOWS")
 	@Builder.Default 
 	private List<_User> follows = new ArrayList<>();
 
+	@Relationship(type = "INTERESTED_IN")
+	@Builder.Default 
+	private List<Topic> interests = new ArrayList<>();
 	
 	public void addFollows(_User... followUs) {
-		follows.addAll(asList(followUs));
+		this.follows.addAll(asList(followUs));
+	}	
+	
+	public void addInterests(Topic... interests) {
+		this.interests.addAll(asList(interests));
 	}	
 }

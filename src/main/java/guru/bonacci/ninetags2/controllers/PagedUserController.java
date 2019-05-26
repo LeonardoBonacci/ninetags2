@@ -1,5 +1,7 @@
 package guru.bonacci.ninetags2.controllers;
 
+import static guru.bonacci.ninetags2.web.Whelper.handleFailure;
+
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.data.domain.Pageable;
@@ -12,9 +14,7 @@ import guru.bonacci.ninetags2.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/users/paged")
 @RequiredArgsConstructor
@@ -25,11 +25,11 @@ public class PagedUserController {
 
 	
 	@ApiOperation(value = "Other users that the user follows")
-    @GetMapping("/followers")
+    @GetMapping("/followed")
     public CompletableFuture<ResponseEntity<?>> getFollowed(final Pageable page) {
-		return service.getFollowers(page)
+		return service.getFollowed(page)
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
-		        .exceptionally(WebHelper.handleFailure);
+		        .exceptionally(handleFailure);
     }
 
 	@ApiOperation(value = "Hall of fame.. most liked users today")
