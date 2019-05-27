@@ -1,5 +1,8 @@
 package guru.bonacci.ninetags2.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
@@ -14,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
-@Builder
+@Builder(toBuilder=true)
 @ToString
 @NodeEntity
 @NoArgsConstructor
@@ -23,15 +26,19 @@ public class Share {
 
 	
 	@Id @GeneratedValue
-	private Long id;
+	Long id;
 	
     @ApiModelProperty(notes = "whatever it is named by the user")
 	@Index(unique=true) 
-	private String title;
+	String title;
 
     @ApiModelProperty(notes = "url pointing to the content")
-	public String url;
+	String url;
 
 	@Relationship(type = "SHARED", direction=Relationship.INCOMING)
-	private _User by;
+	_User by;
+	
+	@Relationship(type = "IS_ABOUT")
+	@Builder.Default 
+	List<Topic> about = new ArrayList<>();
 }

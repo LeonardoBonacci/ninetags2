@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.services.TopicService;
+import guru.bonacci.ninetags2.webdomain.PageDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +26,12 @@ public class PagedTopicController {
 	private final TopicService service;
 
 	
+	// curl -X GET -H 'Dear-User: Alpha' -i 'http://localhost:8080/topics/paged/followed?page=0&size=5'
 	@ApiOperation(value = "Topics that the user follows")
     @GetMapping("/followed")
     public CompletableFuture<ResponseEntity<?>> getFollowed(final Pageable pageRequest) {
 		return service.getFollowed(pageRequest)
+				.thenApply(results -> new PageDto<Topic>(results.getContent()))
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
     }

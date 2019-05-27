@@ -24,14 +24,14 @@ public class Follows {
 
 	
 	@Id @GeneratedValue
-	private Long id;
+	Long id;
 
 	@Property @Index 
-	private Integer prio;
+	Integer prio;
 
 	@StartNode 
-	private _User  follower;
+	_User  follower;
 	
 	@EndNode 
-	private _User followed;
+	_User followed;
 }

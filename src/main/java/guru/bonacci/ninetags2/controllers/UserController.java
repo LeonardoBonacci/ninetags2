@@ -28,7 +28,7 @@ public class UserController {
 
 	private final UserService service;
 	
-	
+	// curl -X GET -H 'Dear-User: Alpha' -i http://localhost:8080/users/Alpha
 	@ApiOperation(value = "Get the user")
     @GetMapping("/{name}")
     public CompletableFuture<ResponseEntity<?>> getByName(@PathVariable("name") String name) {
@@ -36,7 +36,8 @@ public class UserController {
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
     }
-	
+
+	// curl -X GET -H 'Dear-User: Alpha' -i http://localhost:8080/users/followers
 	@ApiOperation(value = "Get followers, for mailing service")
     @GetMapping("/followers")
     public CompletableFuture<ResponseEntity<?>> getFollowers() {

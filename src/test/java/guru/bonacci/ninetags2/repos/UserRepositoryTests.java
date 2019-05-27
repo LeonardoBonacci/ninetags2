@@ -48,6 +48,7 @@ public class UserRepositoryTests {
 
 		alpha.addFollows(beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu);
 		beta.addFollows(gamma);
+		beta.addFollows(alpha);
 		repo.saveAll(Arrays.asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
 	}
 
@@ -61,8 +62,8 @@ public class UserRepositoryTests {
 	@Test
 	public void testGetFollowed() throws InterruptedException, ExecutionException {
 		String name = "Alpha";
-		List<_User> results = repo.getFollowed(name).get();
-		assertEquals(11, results.size());
+		List<_User> results = repo.getFollowers(name).get();
+		assertEquals(1, results.size());
 	}
 	
 	@Test

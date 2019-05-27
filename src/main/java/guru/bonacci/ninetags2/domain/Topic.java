@@ -21,8 +21,13 @@ public class Topic {
 
 	
 	@Id @GeneratedValue
-	private Long id;
+	Long id;
 	
 	@Index(unique=true) 
-	private String name;
+	String name;
+	
+
+	public Topic(String name) {
+		this.name = name;
+	}
 }

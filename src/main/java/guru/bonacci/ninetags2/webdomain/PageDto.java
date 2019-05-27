@@ -1,4 +1,4 @@
-package guru.bonacci.ninetags2.web;
+package guru.bonacci.ninetags2.webdomain;
 
 import java.util.ArrayList;
 import java.util.List;

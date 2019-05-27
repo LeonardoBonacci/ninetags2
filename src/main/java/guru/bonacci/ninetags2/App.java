@@ -1,12 +1,11 @@
 package guru.bonacci.ninetags2;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.SharedWith;
@@ -18,7 +17,6 @@ import guru.bonacci.ninetags2.repos.TopicRepository;
 import guru.bonacci.ninetags2.repos.UserRepository;
 import lombok.val;
 
-@EnableAsync
 @SpringBootApplication
 public class App {
 
@@ -38,7 +36,10 @@ public class App {
 	@Bean
 	CommandLineRunner init(UserRepository urepo, TopicRepository trepo, ShareRepository srepo, SharedWithRepository swrepo) {
 		return args -> {
+			urepo.deleteAll();
 			trepo.deleteAll();
+			srepo.deleteAll();
+			swrepo.deleteAll();
 			
 			val culture = Topic.builder().name("Culture").build();
 			val cooking = Topic.builder().name("Cooking").build();
@@ -53,7 +54,6 @@ public class App {
 			val dance = Topic.builder().name("Dance").build();
 			trepo.saveAll(asList(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports, dance));
 
-			urepo.deleteAll();
 			
 			val alpha = _User.builder().name("Alpha").build();
 			val beta = _User.builder().name("Beta").build();
@@ -72,6 +72,7 @@ public class App {
 			alpha.addFollows(beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu);
 			alpha.addInterests(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports);
 			beta.addFollows(gamma);
+			beta.addFollows(alpha);
 			urepo.saveAll(asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
 
 			val sculture = Share.builder().title("On Culture").by(alpha).build();

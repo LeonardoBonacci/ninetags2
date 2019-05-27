@@ -37,8 +37,8 @@ public class UserService {
 
 	@Transactional(readOnly = true)
 	public CompletableFuture<List<_User>> getFollowed() {
-		val followed = repo.getFollowed(context.getAuthentication());
-		return followed.whenComplete((results, ex) -> results.forEach(result -> log.info("found followed user " + result)));
+		val followed = repo.getFollowers(context.getAuthentication());
+		return followed.whenComplete((results, ex) -> results.forEach(result -> log.info("found follower " + result)));
 	}
 
 	@Transactional(readOnly = true)

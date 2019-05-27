@@ -2,6 +2,7 @@ package guru.bonacci.ninetags2.services;
 
 import java.util.concurrent.CompletableFuture;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.repos.ShareRepository;
 import guru.bonacci.ninetags2.web.FakeSecurityContext;
-import guru.bonacci.ninetags2.web.PageDto;
+import guru.bonacci.ninetags2.webdomain.PageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -38,26 +39,23 @@ public class PagedShareService {
 	
 	
 	@Transactional(readOnly = true)
-	public CompletableFuture<PageDto<Share>> getPrivateShares(final Pageable pageRequest) {
+	public CompletableFuture<Page<Share>> getPrivateShares(final Pageable pageRequest) {
 		val privates = repo.getPrivateShares(context.getAuthentication(), pageRequest);
-		return privates.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found private share " + result)))
-						.thenApply(results -> new PageDto<Share>(results.getContent()));
+		return privates.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found private share " + result)));
 	}
 
 
 	@Transactional(readOnly = true)
-	public CompletableFuture<PageDto<Share>> getReceivedDirectedShares(final Pageable pageRequest) {
+	public CompletableFuture<Page<Share>> getReceivedDirectedShares(final Pageable pageRequest) {
 		val directed = repo.getReceivedDirectedShares(context.getAuthentication(), pageRequest);
-		return directed.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found received directed share " + result)))
-						.thenApply(results -> new PageDto<Share>(results.getContent()));
+		return directed.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found received directed share " + result)));
 	}
 
 	
 	@Transactional(readOnly = true)
-	public CompletableFuture<PageDto<Share>> getSentDirectedShares(final Pageable pageRequest) {
+	public CompletableFuture<Page<Share>> getSentDirectedShares(final Pageable pageRequest) {
 		val directed = repo.getSentDirectedShares(context.getAuthentication(), pageRequest);
-		return directed.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found sent directed share " + result)))
-						.thenApply(results -> new PageDto<Share>(results.getContent()));
+		return directed.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found sent directed share " + result)));
 	}
 
 }

@@ -26,26 +26,26 @@ public class _User {
 
 	
 	@Id @GeneratedValue
-	private Long id;
+	Long id;
 	
 	@Index(unique=true) 
-	private String name;
+	String name;
 
 	@Relationship(type = "FOLLOWS")
 	@Builder.Default 
-	private List<Follows> follows = new ArrayList<>();
+	List<Follows> follows = new ArrayList<>();
 
 	@Relationship(type = "INTERESTED_IN")
 	@Builder.Default 
-	private List<Interests> interests = new ArrayList<>();
+	List<Interests> interests = new ArrayList<>();
 	
 
 	public void addFollows(@NonNull _User... followUs) {
 		for (_User followMe : followUs)
-			addFollow(followMe);
+			addFollows(followMe);
 	}	
 
-	private void addFollow(@NonNull _User followMe) {
+	private void addFollows(@NonNull _User followMe) {
 		this.follows.add(Follows.builder().follower(this).followed(followMe).prio(this.follows.size()).build());
 	}	
 

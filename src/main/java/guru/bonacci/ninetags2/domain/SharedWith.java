@@ -20,11 +20,11 @@ public class SharedWith {
 
 	
 	@Id @GeneratedValue
-	private Long id;
+	Long id;
 
 	@StartNode 
-	private Share share;
+	Share share;
 	
 	@EndNode 
-	private _User with;
+	_User with;
 }
