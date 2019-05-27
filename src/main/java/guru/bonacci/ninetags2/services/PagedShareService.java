@@ -44,4 +44,20 @@ public class PagedShareService {
 						.thenApply(results -> new PageDto<Share>(results.getContent()));
 	}
 
+
+	@Transactional(readOnly = true)
+	public CompletableFuture<PageDto<Share>> getReceivedDirectShares(final Pageable pageRequest) {
+		val directed = repo.getReceivedDirectShares(context.getAuthentication(), pageRequest);
+		return directed.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found received direct share " + result)))
+						.thenApply(results -> new PageDto<Share>(results.getContent()));
+	}
+
+	
+	@Transactional(readOnly = true)
+	public CompletableFuture<PageDto<Share>> getSentDirectShares(final Pageable pageRequest) {
+		val directed = repo.getSentDirectShares(context.getAuthentication(), pageRequest);
+		return directed.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found sent direct share " + result)))
+						.thenApply(results -> new PageDto<Share>(results.getContent()));
+	}
+
 }

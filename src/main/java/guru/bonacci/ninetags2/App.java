@@ -22,6 +22,14 @@ import lombok.val;
 @SpringBootApplication
 public class App {
 
+	// Functionalities
+	// private bookmarks admin (pocket)
+	// private messaging (mailing, like e-mail)
+	// public content sharing + content followed
+	// content searching
+	// recommendations
+	// space time search
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
@@ -87,12 +95,4 @@ public class App {
 			swrepo.saveAll(asList(swculture, swcooking, swhobbies, swliterature));
 		};
 	}
-	
-	// Functionalities
-	// private bookmarks admin (pocket)
-	// private messaging (mailing, like e-mail)
-	// public content sharing + content followed
-	// content searching
-	// recommendations
-	// space time search
 }
