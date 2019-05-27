@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SharedWith {
 
+	
 	@Id @GeneratedValue
 	private Long id;
 

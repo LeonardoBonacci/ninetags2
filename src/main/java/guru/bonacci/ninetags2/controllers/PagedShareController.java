@@ -1,6 +1,6 @@
 package guru.bonacci.ninetags2.controllers;
 
-import static guru.bonacci.ninetags2.web.Whelper.handleFailure;
+import static guru.bonacci.ninetags2.web.ExceptionHandler.handleFailure;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -26,8 +26,8 @@ public class PagedShareController {
 	
 	@ApiOperation(value = "Bookmarks: retrieve your shares. No other user has access to these shares")
     @GetMapping("/private")
-    public CompletableFuture<ResponseEntity<?>> getShares(final Pageable page) {
-		return service.getPrivateShares(page)
+    public CompletableFuture<ResponseEntity<?>> getShares(final Pageable pageRequest) {
+		return service.getPrivateShares(pageRequest)
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
     }

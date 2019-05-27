@@ -23,6 +23,6 @@ public interface ShareRepository extends Neo4jRepository<Share, Long> {
 		   countQuery = "MATCH (user:User {name:{name}})<-[:SHARED_WITH]-(share:Share)<-[:SHARED]-(sharer:User) " + 
 					"WHERE user = sharer " + 
 					"RETURN COUNT(share) " )
-	CompletableFuture<Page<Share>> getPrivateShares(@Param("name") String name, Pageable pageable);
+	CompletableFuture<Page<Share>> getPrivateShares(@Param("name") String name, Pageable pageRequest);
 
 }

@@ -1,6 +1,6 @@
 package guru.bonacci.ninetags2.controllers;
 
-import static guru.bonacci.ninetags2.web.Whelper.handleFailure;
+import static guru.bonacci.ninetags2.web.ExceptionHandler.handleFailure;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -26,8 +26,8 @@ public class PagedTopicController {
 	
 	@ApiOperation(value = "Topics that the user follows")
     @GetMapping("/followed")
-    public CompletableFuture<ResponseEntity<?>> getFollowed(final Pageable page) {
-		return service.getFollowed(page)
+    public CompletableFuture<ResponseEntity<?>> getFollowed(final Pageable pageRequest) {
+		return service.getFollowed(pageRequest)
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
     }

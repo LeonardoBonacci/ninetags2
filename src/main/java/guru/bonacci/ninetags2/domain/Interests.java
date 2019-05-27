@@ -22,6 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Interests {
 
+	
 	@Id @GeneratedValue
 	private Long id;
 

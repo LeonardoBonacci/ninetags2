@@ -22,6 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Follows {
 
+	
 	@Id @GeneratedValue
 	private Long id;
 

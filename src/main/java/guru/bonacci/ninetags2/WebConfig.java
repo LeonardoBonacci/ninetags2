@@ -17,10 +17,6 @@ import guru.bonacci.ninetags2.web.UserInterceptor;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-	public WebConfig() {
-		super();
-	}
-
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");

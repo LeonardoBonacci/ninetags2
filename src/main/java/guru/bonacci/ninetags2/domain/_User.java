@@ -24,6 +24,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class _User {
 
+	
 	@Id @GeneratedValue
 	private Long id;
 	

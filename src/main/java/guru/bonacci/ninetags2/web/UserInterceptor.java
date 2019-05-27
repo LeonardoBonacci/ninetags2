@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,7 +25,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
     	if (request.getServletPath().contains("swagger")) return true;
     	
 
-    	String ourDearUser = request.getHeader(USER_DETAILS_HEADER);
+    	val ourDearUser = request.getHeader(USER_DETAILS_HEADER);
     	if (ourDearUser == null) {
 	        response.getWriter().write("You forgot the http-header '" + USER_DETAILS_HEADER + "'");
 	        response.setStatus(HttpStatus.UNAUTHORIZED.value());

@@ -21,6 +21,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Share {
 
+	
 	@Id @GeneratedValue
 	private Long id;
 	

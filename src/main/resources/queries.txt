@@ -1,18 +1,24 @@
-// SENT-ITEMS: SHARED BY ME
-MATCH (user:User {name:'Alpha'})-[:SHARED]->(share:Share)
+// SENT-ITEMS: DIRECT SHARES BY ME
+MATCH (user:User {name:'Alpha'})-[:SHARED]->(share:Share)-[:SHARED_WITH]->(:User)
 RETURN share
 ORDER BY ID(share) DESC
 SKIP 0
 LIMIT 9
 
 
-// INBOX: SHARED WITH ME
+// INBOX: DIRECT SHARED WITH ME
 MATCH (user:User {name:'Alpha'})<-[:SHARED_WITH]-(share:Share)
 RETURN share
 ORDER BY ID(share) DESC
 SKIP 0
 LIMIT 9
 
+// SENT-ITEMS: PUBLIC SHARED BY ME - TODO
+MATCH (user:User {name:'Alpha'})-[:SHARED]->(share:Share)-[:SHARED_WITH]->(:User)
+RETURN share
+ORDER BY ID(share) DESC
+SKIP 0
+LIMIT 9
 
 // USERS PERSPECTIVE
 MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)

@@ -19,6 +19,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Topic {
 
+	
 	@Id @GeneratedValue
 	private Long id;
 	

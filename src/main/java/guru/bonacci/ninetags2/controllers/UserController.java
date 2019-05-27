@@ -1,6 +1,6 @@
 package guru.bonacci.ninetags2.controllers;
 
-import static guru.bonacci.ninetags2.web.Whelper.handleFailure;
+import static guru.bonacci.ninetags2.web.ExceptionHandler.handleFailure;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
