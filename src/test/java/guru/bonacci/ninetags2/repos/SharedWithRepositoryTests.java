@@ -64,12 +64,14 @@ public class SharedWithRepositoryTests {
 
 		val swliterature = SharedWith.builder().share(sliterature).with(beta).build();
 		val swart = SharedWith.builder().share(sart).with(beta).build();
-		val swentertainment = SharedWith.builder().share(sentertainment).with(beta).build();
-		val swfiction = SharedWith.builder().share(sfiction).with(gamma).build();
+		val swentertainment1 = SharedWith.builder().share(sentertainment).with(beta).build();
+		val swentertainment2 = SharedWith.builder().share(sentertainment).with(gamma).build();
+		val swfiction1 = SharedWith.builder().share(sfiction).with(beta).build();
+		val swfiction2 = SharedWith.builder().share(sfiction).with(gamma).build();
 		val swgame = SharedWith.builder().share(sgame).with(gamma).build();
 		val swpoetry = SharedWith.builder().share(spoetry).with(gamma).build();
 
-		swrepo.saveAll(asList(swculture, swcooking, swhobbies, swliterature, swart, swentertainment, swfiction, swgame, swpoetry));
+		swrepo.saveAll(asList(swculture, swcooking, swhobbies, swliterature, swart, swentertainment1, swentertainment2, swfiction1, swfiction2, swgame, swpoetry));
 	}
 
 	@Test
@@ -87,29 +89,29 @@ public class SharedWithRepositoryTests {
 	}
 	
 	@Test
-	public void testGetSentDirectShares() throws InterruptedException, ExecutionException {
+	public void testGetSentDirectedShares() throws InterruptedException, ExecutionException {
 		String name = "Alpha";
-		var results = srepo.getSentDirectShares(name, PageRequest.of(0, 4)).get();
+		var results = srepo.getSentDirectedShares(name, PageRequest.of(0, 4)).get();
 		assertEquals(4, results.getNumberOfElements());
 		assertEquals(6, results.getTotalElements());
 		
-		results = srepo.getSentDirectShares(name, PageRequest.of(1, 4)).get();
+		results = srepo.getSentDirectedShares(name, PageRequest.of(1, 4)).get();
 		assertEquals(2, results.getNumberOfElements());
 
-		results = srepo.getSentDirectShares(name, PageRequest.of(2, 4)).get();
+		results = srepo.getSentDirectedShares(name, PageRequest.of(2, 4)).get();
 		assertEquals(0, results.getNumberOfElements());
 	}
 
 	@Test
-	public void testGetReceivedDirectShares() throws InterruptedException, ExecutionException {
+	public void testGetReceivedDirectedShares() throws InterruptedException, ExecutionException {
 		String name = "Beta";
-		var results = srepo.getReceivedDirectShares(name, PageRequest.of(0, 3)).get();
+		var results = srepo.getReceivedDirectedShares(name, PageRequest.of(0, 3)).get();
 		assertEquals(3, results.getNumberOfElements());
-		assertEquals(3, results.getTotalElements());
+		assertEquals(4, results.getTotalElements());
 
 		name = "Gamma";
-		results = srepo.getReceivedDirectShares(name, PageRequest.of(0, 3)).get();
+		results = srepo.getReceivedDirectedShares(name, PageRequest.of(0, 3)).get();
 		assertEquals(3, results.getNumberOfElements());
-		assertEquals(3, results.getTotalElements());
+		assertEquals(4, results.getTotalElements());
 	}
 }

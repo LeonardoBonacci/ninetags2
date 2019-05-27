@@ -32,18 +32,18 @@ public class PagedShareController {
 		        .exceptionally(handleFailure);
     }
 
-	@ApiOperation(value = "Mailing: sent-items")
+	@ApiOperation(value = "Mailing/directed shares: sent-items")
     @GetMapping("/sent")
-    public CompletableFuture<ResponseEntity<?>> getSentDirectShares(final Pageable pageRequest) {
-		return service.getSentDirectShares(pageRequest)
+    public CompletableFuture<ResponseEntity<?>> getSentDirectedShares(final Pageable pageRequest) {
+		return service.getSentDirectedShares(pageRequest)
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
     }
 
-	@ApiOperation(value = "Mailing: inbox")
+	@ApiOperation(value = "Mailing/directed shares: inbox")
     @GetMapping("/inbox")
-    public CompletableFuture<ResponseEntity<?>> getReceivedDirectShares(final Pageable pageRequest) {
-		return service.getReceivedDirectShares(pageRequest)
+    public CompletableFuture<ResponseEntity<?>> getReceivedDirectedShares(final Pageable pageRequest) {
+		return service.getReceivedDirectedShares(pageRequest)
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
     }

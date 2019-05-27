@@ -30,12 +30,12 @@ public interface ShareRepository extends Neo4jRepository<Share, Long> {
 	@Depth(value = 0)
 	@Query(value = "MATCH (user:User {name:{name}})-[:SHARED]->(share:Share)-[:SHARED_WITH]->(receiver:User) " + 
 					"WHERE user <> receiver " + 
-					"RETURN share " + 
+					"RETURN DISTINCT(share) " + 
 					"ORDER BY ID(share) DESC ",
 		   countQuery = "MATCH (user:User {name:{name}})-[:SHARED]->(share:Share)-[:SHARED_WITH]->(receiver:User) " + 
 					"WHERE user <> receiver " + 
-					"RETURN COUNT(share) " )
-	CompletableFuture<Page<Share>> getSentDirectShares(@Param("name") String name, Pageable pageRequest);
+					"RETURN COUNT(DISTINCT(share)) " )
+	CompletableFuture<Page<Share>> getSentDirectedShares(@Param("name") String name, Pageable pageRequest);
 
 	
 	@Depth(value = 0)
@@ -46,6 +46,6 @@ public interface ShareRepository extends Neo4jRepository<Share, Long> {
 		   countQuery = "MATCH (user:User {name:{name}})<-[:SHARED_WITH]-(share:Share)<-[:SHARED]-(sharer:User) " + 
 				   "WHERE user <> sharer " + 
 				   "RETURN COUNT(share) " )
-	CompletableFuture<Page<Share>> getReceivedDirectShares(@Param("name") String name, Pageable pageRequest);
+	CompletableFuture<Page<Share>> getReceivedDirectedShares(@Param("name") String name, Pageable pageRequest);
 
 }
