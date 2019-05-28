@@ -1,5 +1,6 @@
 package guru.bonacci.ninetags2.repos;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +15,9 @@ import guru.bonacci.ninetags2.domain.Share;
 
 @Repository
 public interface ShareRepository extends Neo4jRepository<Share, Long> {
+
+	
+	CompletableFuture<List<Share>> findByTitleContaining(String title);
 
 	
 	@Depth(value = 0)

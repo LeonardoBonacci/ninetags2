@@ -1,9 +1,9 @@
 package guru.bonacci.ninetags2.services;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
@@ -37,30 +37,33 @@ public class ShareServiceTests {
 	FakeSecurityContext securityContext;
 	
 	@Autowired
-	UserRepository urepo;
+	UserRepository userRepo;
 
 	@Autowired
-	TopicRepository trepo;
+	TopicRepository topicRepo;
 
 	@Autowired
-	ShareRepository srepo;
+	ShareRepository shareRepo;
 
 	@Autowired
-	SharedWithRepository swrepo;
+	SharedWithRepository sharedWithRepo;
 
-	_User user;
-	
+	_User sender;
+	String username1 = "Beta", username2 = "Gamma";
 
 	@Before
 	public void setUp() {
-		urepo.deleteAll();
-		trepo.deleteAll();
-		srepo.deleteAll();
-		swrepo.deleteAll();
+		userRepo.deleteAll();
+		topicRepo.deleteAll();
+		shareRepo.deleteAll();
+		sharedWithRepo.deleteAll();
 	
 		String username = "Alpha";
 		securityContext.setAuthentication(username);
-		user = urepo.save(_User.builder().name(username).build());
+		sender = userRepo.save(_User.builder().name(username).build());
+
+		userRepo.save(_User.builder().name(username1).build());
+		userRepo.save(_User.builder().name(username2).build());
 	}
 
 	@Test
@@ -68,15 +71,43 @@ public class ShareServiceTests {
 		String title = "test share";
 		Share.ShareBuilder share = Share.builder().title(title);
 		
-		Long shareId = sservice.insertPrivate(share, Arrays.asList(new Topic("test topic 1"), new Topic("test topic 2"))).get();
+		Long shareId = sservice.insertPrivate(share, asList(new Topic("test topic 1"), new Topic("test topic 2"))).get();
 
-		Iterator<Topic> ts = trepo.findAll().iterator();
+		Iterator<Topic> ts = topicRepo.findAll().iterator();
 		ts.next(); ts.next();
 		assertFalse(ts.hasNext());
 		
-		assertEquals(title, srepo.findById(shareId).get().getTitle());
-		SharedWith sw = swrepo.findAll().iterator().next();
+		assertEquals(title, shareRepo.findById(shareId).get().getTitle());
+		Iterator<SharedWith> sws = sharedWithRepo.findAll().iterator();
+
+		SharedWith sw = sws.next();
 		assertEquals(title, sw.getShare().getTitle());
-		assertEquals(user.getName(), sw.getWith().getName());
+		assertEquals(sender.getName(), sw.getWith().getName());
+		assertFalse(sws.hasNext());
 	}
+	
+	@Test
+	public void testInsertDirectedShare() throws InterruptedException, ExecutionException {
+		String title = "test share";
+		Share.ShareBuilder share = Share.builder().title(title);
+		
+		Long shareId = sservice.insertDirected(share, asList(new Topic("test topic 1"), new Topic("test topic 2")), asList(username1, username2)).get();
+
+		Iterator<Topic> ts = topicRepo.findAll().iterator();
+		ts.next(); ts.next();
+		assertFalse(ts.hasNext());
+		
+		assertEquals(title, shareRepo.findById(shareId).get().getTitle());
+		
+		Iterator<SharedWith> sws = sharedWithRepo.findAll().iterator();
+		SharedWith sw = sws.next();
+		assertEquals(title, sw.getShare().getTitle());
+		assertEquals(username1, sw.getWith().getName());
+		
+		sw = sws.next();
+		assertEquals(title, sw.getShare().getTitle());
+		assertEquals(username2, sw.getWith().getName());
+		assertFalse(sws.hasNext());
+	}
+
 }
