@@ -31,19 +31,23 @@ public interface ShareRepository extends Neo4jRepository<Share, Long> {
 	CompletableFuture<Page<Share>> getPrivateShares(@Param("name") String name, Pageable pageRequest);
 
 
-	@Query(value = "MATCH (user:User {name:{name}})-[:SHARED]->(share:Share)-[:SHARED_WITH]->(receiver:User) " + 
-					"WHERE user <> receiver " + 
-					"RETURN DISTINCT(share) " + 
+	@Query(value = "MATCH (sharer:User {name:{name}})-[shared:SHARED]->(share:Share)-[:SHARED_WITH]->(receiver:User) " + 
+					"WHERE sharer <> receiver " + 
+					"WITH share, shared, sharer " + 
+					"OPTIONAL MATCH (share)-[about:IS_ABOUT]->(topic:Topic) " +
+					"RETURN share, shared, sharer, about, topic " + 
 					"ORDER BY ID(share) DESC ",
 		   countQuery = "MATCH (user:User {name:{name}})-[:SHARED]->(share:Share)-[:SHARED_WITH]->(receiver:User) " + 
 					"WHERE user <> receiver " + 
-					"RETURN COUNT(DISTINCT(share)) " )
+					"RETURN COUNT(share) " )
 	CompletableFuture<Page<Share>> getSentDirectedShares(@Param("name") String name, Pageable pageRequest);
 
 	
-	@Query(value = "MATCH (user:User {name:{name}})<-[:SHARED_WITH]-(share:Share)<-[:SHARED]-(sharer:User) " + 
+	@Query(value = "MATCH (user:User {name:{name}})<-[:SHARED_WITH]-(share:Share)<-[shared:SHARED]-(sharer:User) " + 
 					"WHERE user <> sharer " + 
-					"RETURN share " + 
+					"WITH share, shared, sharer " + 
+					"OPTIONAL MATCH (share)-[about:IS_ABOUT]->(topic:Topic) " +
+					"RETURN share, shared, sharer, about, topic " + 
 					"ORDER BY ID(share) DESC ",
 		   countQuery = "MATCH (user:User {name:{name}})<-[:SHARED_WITH]-(share:Share)<-[:SHARED]-(sharer:User) " + 
 				   "WHERE user <> sharer " + 
