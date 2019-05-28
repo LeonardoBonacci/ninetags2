@@ -39,6 +39,13 @@ public class PagedShareService {
 	
 	
 	@Transactional(readOnly = true)
+	public CompletableFuture<Page<Share>> getSentShares(final Pageable pageRequest) {
+		val sents = repo.getSentShares(context.getAuthentication(), pageRequest);
+		return sents.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found public share " + result)));
+	}
+
+	
+	@Transactional(readOnly = true)
 	public CompletableFuture<Page<Share>> getPrivateShares(final Pageable pageRequest) {
 		val privates = repo.getPrivateShares(context.getAuthentication(), pageRequest);
 		return privates.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found private share " + result)));

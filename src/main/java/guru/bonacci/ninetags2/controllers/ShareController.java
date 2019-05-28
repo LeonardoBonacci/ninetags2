@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,10 +44,19 @@ public class ShareController {
 	}
 
 	
+	// curl -X POST -H 'Dear-User: Alpha' -H 'Content-Type: application/json' -i
+	// http://localhost:8080/shares/ --data
+	// '{"title":"anothertitle","url":"https://www.encyclo.nl/begrip/bla","topics":["Foo","Another
+	// topic"]}'
 	@ApiOperation(value = "Saves share connected to tags and user. Adds non-existing topics")
 	@PostMapping
-	public CompletableFuture<ResponseEntity<?>> insert(final Share share) {
-		return null;
+	public CompletableFuture<ResponseEntity<?>> insert(@RequestBody final ShareDto share) {
+		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl());
+		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
+
+		return service.insert(shareBuilder, topics)
+				.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+				.exceptionally(handleFailure);
 	}
 
 	
@@ -92,4 +102,9 @@ public class ShareController {
 		return null;
 	}
 
+	@ApiOperation(value = "Delete share")
+	@DeleteMapping("{id}")
+	public CompletableFuture<ResponseEntity<?>> delete() {
+		return null;
+	}
 }

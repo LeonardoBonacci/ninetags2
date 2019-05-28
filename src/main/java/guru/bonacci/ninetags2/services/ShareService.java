@@ -41,6 +41,17 @@ public class ShareService {
 		return shares.whenComplete((results, ex) -> results.forEach(s -> log.info("found share " + s)));
 	}
 
+	
+	@Transactional
+	public CompletableFuture<Long> insert(final Share.ShareBuilder shareBuilder, final List<Topic> topics) {
+		_User fromMe = context.getTheUser();
+		
+		val savedTopics = topicRepo.saveAll(topics);
+		val share = shareBuilder.by(fromMe).about(stream(savedTopics.spliterator(), false).collect(toList())).build();
+		return completedFuture(shareRepo.save(share).getId());
+	}
+
+	
 	@Transactional
 	public CompletableFuture<Long> insertPrivate(final Share.ShareBuilder shareBuilder, final List<Topic> topics) {
 		_User fromMe = context.getTheUser();
@@ -51,6 +62,7 @@ public class ShareService {
 		return completedFuture(shareRepo.save(share).getId());
 	}
 
+	
 	@Transactional
 	public CompletableFuture<Long> insertDirected(final Share.ShareBuilder shareBuilder, final List<Topic> topics, final List<String> toUsernames) {
 		_User fromMe = context.getTheUser();

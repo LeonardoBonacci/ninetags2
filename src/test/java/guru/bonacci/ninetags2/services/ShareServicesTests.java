@@ -73,6 +73,25 @@ public class ShareServicesTests {
 	}
 
 	@Test
+	public void testInsertAndGetShare() throws InterruptedException, ExecutionException {
+		String title = "test share";
+		Share.ShareBuilder share = Share.builder().title(title);
+		
+		Long shareId = shareService.insert(share, asList(new Topic("test topic 1"), new Topic("test topic 2"))).get();
+
+		Iterator<Topic> ts = topicRepo.findAll().iterator();
+		ts.next(); ts.next();
+		assertFalse(ts.hasNext());
+		
+		assertEquals(title, shareRepo.findById(shareId).get().getTitle());
+
+		Share result = pagedShareService.getSentShares(PageRequest.of(0, 1)).get().getContent().get(0);
+		assertNotNull(result.getBy());
+		assertNotNull(result.getAbout());
+	}
+
+	
+	@Test
 	public void testInsertAndGetPrivateShare() throws InterruptedException, ExecutionException {
 		String title = "test share";
 		Share.ShareBuilder share = Share.builder().title(title);

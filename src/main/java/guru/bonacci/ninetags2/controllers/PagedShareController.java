@@ -26,6 +26,17 @@ public class PagedShareController {
 	private final PagedShareService service;
 
 
+	// curl -X GET -H 'Dear-User: Alpha' -i 'http://localhost:8080/shares/paged/sent?page=0&size=5'
+	@ApiOperation(value = "Retrieve your public shares")
+    @GetMapping("/sent")
+    public CompletableFuture<ResponseEntity<?>> getSentShares(final Pageable pageRequest) {
+		return service.getSentShares(pageRequest)
+				.thenApply(results -> new PageDto<Share>(results.getContent()))
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
+    }
+
+	
 	// curl -X GET -H 'Dear-User: Alpha' -i 'http://localhost:8080/shares/paged/private?page=0&size=5'
 	@ApiOperation(value = "Bookmarks: retrieve your shares. No other user has access to these shares")
     @GetMapping("/private")
@@ -36,9 +47,9 @@ public class PagedShareController {
 		        .exceptionally(handleFailure);
     }
 
-	// curl -X GET -H 'Dear-User: Alpha' -i http://localhost:8080/shares/paged/sent
+	// curl -X GET -H 'Dear-User: Alpha' -i http://localhost:8080/shares/paged/directed
 	@ApiOperation(value = "Mailing/directed shares: sent-items")
-    @GetMapping("/sent")
+    @GetMapping("/directed")
     public CompletableFuture<ResponseEntity<?>> getSentDirectedShares(final Pageable pageRequest) {
 		return service.getSentDirectedShares(pageRequest)
 				.thenApply(results -> new PageDto<Share>(results.getContent()))
