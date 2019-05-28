@@ -20,13 +20,13 @@ import lombok.val;
 @SpringBootApplication
 public class App {
 
-	// Functionalities
-	// private bookmarks admin (pocket)
-	// private messaging (mailing, like e-mail)
-	// public content sharing + content followed
-	// content searching
-	// recommendations
-	// space time search
+	// Functionalities:
+	// > private bookmarks admin (pocket)
+	// > private messaging (mailing, like e-mail)
+	// > public content sharing + content followed
+	// > content searching
+	// > recommendations
+	// > space time search
 
 
 	public static void main(String[] args) {
@@ -75,10 +75,10 @@ public class App {
 			beta.addFollows(alpha);
 			urepo.saveAll(asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
 
-			val sculture = Share.builder().title("On Culture").by(alpha).build();
-			val scooking = Share.builder().title("On Cooking").by(alpha).build();
-			val shobbies = Share.builder().title("On Hobbies").by(alpha).build();
-			val sliterature = Share.builder().title("On Literature").by(alpha).build();
+			val sculture = Share.builder().title("Culture").by(alpha).build();
+			val scooking = Share.builder().title("Cooking").by(alpha).build();
+			val shobbies = Share.builder().title("Hobbies").by(alpha).build();
+			val sliterature = Share.builder().title("Literature").by(alpha).build();
 			val sart = Share.builder().title("On Art").by(alpha).build();
 			val sentertainment = Share.builder().title("On Entertainment").by(alpha).build();
 			val sfiction = Share.builder().title("On Fiction").by(alpha).build();

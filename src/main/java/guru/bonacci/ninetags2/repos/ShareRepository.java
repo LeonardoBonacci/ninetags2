@@ -18,10 +18,12 @@ public interface ShareRepository extends Neo4jRepository<Share, Long> {
 	
 	CompletableFuture<List<Share>> findByTitleContaining(String title);
 
-	
-	@Query(value = "MATCH (user:User {name:{name}})<-[:SHARED_WITH]-(share:Share)<-[:SHARED]-(sharer:User) " + 
+
+	@Query(value = "MATCH (user:User {name:{name}})<-[:SHARED_WITH]-(share:Share)<-[shared:SHARED]-(sharer:User) " + 
 					"WHERE user = sharer " + 
-					"RETURN share " + 
+					"WITH share, shared, sharer " + 
+					"OPTIONAL MATCH (share)-[about:IS_ABOUT]->(topic:Topic) " +
+					"RETURN share, shared, sharer, about, topic " + 
 					"ORDER BY ID(share) DESC ",
 		   countQuery = "MATCH (user:User {name:{name}})<-[:SHARED_WITH]-(share:Share)<-[:SHARED]-(sharer:User) " + 
 					"WHERE user = sharer " + 

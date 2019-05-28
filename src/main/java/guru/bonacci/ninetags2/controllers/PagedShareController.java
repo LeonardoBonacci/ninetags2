@@ -61,5 +61,4 @@ public class PagedShareController {
     public CompletableFuture<ResponseEntity<?>> getHotShares(final Pageable pageable) {
     	return null;
     }
-
 }

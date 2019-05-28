@@ -37,7 +37,9 @@ public class ShareController {
 	@ApiOperation(value = "For testing purposes, find by title 'like'")
 	@GetMapping("/{title}")
 	public CompletableFuture<ResponseEntity<?>> findByTitle(@PathVariable("title") final String title) {
-		return service.findByTitle(title).<ResponseEntity<?>>thenApply(ResponseEntity::ok).exceptionally(handleFailure);
+		return service.findByTitle(title)
+					.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+					.exceptionally(handleFailure);
 	}
 
 	
@@ -58,11 +60,12 @@ public class ShareController {
 		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl());
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 
-		return service.insertPrivate(shareBuilder, topics).<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		return service.insertPrivate(shareBuilder, topics)
+				.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 				.exceptionally(handleFailure);
 	}
 
-	
+
 	// curl -X POST -H 'Dear-User: Alpha' -H 'Content-Type: application/json' -i
 	// http://localhost:8080/shares/directed --data
 	// '{"title":"sometitle","url":"https://www.some-url.com/","topics":["On

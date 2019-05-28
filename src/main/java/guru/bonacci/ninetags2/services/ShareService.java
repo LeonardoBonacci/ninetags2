@@ -40,7 +40,7 @@ public class ShareService {
 		val shares = shareRepo.findByTitleContaining(title);
 		return shares.whenComplete((results, ex) -> results.forEach(s -> log.info("found share " + s)));
 	}
-	
+
 	@Transactional
 	public CompletableFuture<Long> insertPrivate(final Share.ShareBuilder shareBuilder, final List<Topic> topics) {
 		_User fromMe = context.getTheUser();
