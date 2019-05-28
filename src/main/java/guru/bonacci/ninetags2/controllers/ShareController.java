@@ -87,24 +87,39 @@ public class ShareController {
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 
 		return service.insertDirected(shareBuilder, topics, share.getUsers())
-				.<ResponseEntity<?>>thenApply(ResponseEntity::ok).exceptionally(handleFailure);
+				.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+				.exceptionally(handleFailure);
 	}
 
+	
 	@ApiOperation(value = "Forshares. Possible to add non-existing topics (also relates the topics to each other)")
 	@PostMapping("/for")
 	public CompletableFuture<ResponseEntity<?>> forShare(final Share share, final _User user) {
 		return null;
 	}
 
+	
+	// curl -X PUT -H 'Dear-User: Alpha' -H 'Content-Type: application/json' -i
+	// http://localhost:8080/shares/200 --data
+	// '{"title":"anortitle","url":"https://www.encyclo.nl/begrip/bla","topics":["Foo"]}'
 	@ApiOperation(value = "Update share")
 	@PutMapping("{id}")
-	public CompletableFuture<ResponseEntity<?>> update() {
-		return null;
+	public CompletableFuture<ResponseEntity<?>> update(@PathVariable("id") final Long id, @RequestBody final ShareDto share) {
+		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl()).id(id);
+		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
+
+		return service.update(shareBuilder, topics)
+				.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+				.exceptionally(handleFailure);
 	}
 
+	
+	// curl -X DELETE -H 'Dear-User: Alpha' -i http://localhost:8080/shares/200
 	@ApiOperation(value = "Delete share")
 	@DeleteMapping("{id}")
-	public CompletableFuture<ResponseEntity<?>> delete() {
-		return null;
+	public CompletableFuture<ResponseEntity<?>> delete(@PathVariable("id") final Long id) {
+		return service.delete(id)
+				.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+				.exceptionally(handleFailure);
 	}
 }

@@ -15,7 +15,9 @@ import guru.bonacci.ninetags2.domain.Share;
 @Repository
 public interface ShareRepository extends Neo4jRepository<Share, Long> {
 
-	
+
+	CompletableFuture<Share> findByTitle(final String title);
+
 	CompletableFuture<List<Share>> findByTitleContaining(String title);
 
 

@@ -90,6 +90,32 @@ public class ShareServicesTests {
 		assertNotNull(result.getAbout());
 	}
 
+	@Test
+	public void testCRUD() throws InterruptedException, ExecutionException {
+		String title = "test share";
+		Share.ShareBuilder share = Share.builder().title(title).url("foo");
+
+		// create
+		Long shareId = shareService.insert(share, asList(new Topic("test topic 1"), new Topic("test topic 2"))).get();
+
+		// retrieve
+		Share inserted = shareRepo.findById(shareId).get();
+		assertEquals(title, inserted.getTitle());
+		assertEquals("foo", inserted.getUrl());
+		assertEquals(2, inserted.getAbout().size());
+
+		// update
+		share.url("bar").id(shareId);
+		shareService.update(share, asList(new Topic("test topic 3"))).get();
+		Share updated = shareRepo.findById(shareId).get();
+		assertEquals(title, updated.getTitle());
+		assertEquals("bar", updated.getUrl());
+		assertEquals(1, updated.getAbout().size());
+		
+		// delete
+		shareService.delete(shareId).get();
+		assertFalse(shareRepo.findById(shareId).isPresent());
+	}
 	
 	@Test
 	public void testInsertAndGetPrivateShare() throws InterruptedException, ExecutionException {

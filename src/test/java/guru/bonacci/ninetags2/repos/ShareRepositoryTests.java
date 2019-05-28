@@ -1,7 +1,8 @@
 package guru.bonacci.ninetags2.repos;
 
-import static org.junit.Assert.assertEquals;
 import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.concurrent.ExecutionException;
 
@@ -11,13 +12,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import guru.bonacci.ninetags2.domain.Share;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
 public class ShareRepositoryTests {
 
 	@Autowired
@@ -35,9 +34,15 @@ public class ShareRepositoryTests {
 	}
 
 	@Test
-	public void testFindByTitle() throws InterruptedException, ExecutionException {
+	public void testFindByTitleContaining() throws InterruptedException, ExecutionException {
 		assertEquals(1, repo.findByTitleContaining("foobar").get().size());
 		assertEquals(2, repo.findByTitleContaining("foo").get().size());
-
 	}
+	
+	@Test
+	public void testFindOneByTitle() throws InterruptedException, ExecutionException {
+		Share s = repo.save(Share.builder().title("bar").build());
+		assertNotNull(repo.findByTitle(s.getTitle()).get());
+	}
+
 }

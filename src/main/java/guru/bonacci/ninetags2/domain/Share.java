@@ -12,13 +12,11 @@ import org.neo4j.ogm.annotation.Relationship;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Getter
+@Data
 @Builder(toBuilder=true)
-@ToString
 @NodeEntity
 @NoArgsConstructor
 @AllArgsConstructor
