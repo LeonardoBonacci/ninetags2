@@ -33,18 +33,21 @@ public class ShareController {
 
 	private final ShareService service;
 
+	
 	@ApiOperation(value = "For testing purposes, find by title 'like'")
 	@GetMapping("/{title}")
 	public CompletableFuture<ResponseEntity<?>> findByTitle(@PathVariable("title") final String title) {
 		return service.findByTitle(title).<ResponseEntity<?>>thenApply(ResponseEntity::ok).exceptionally(handleFailure);
 	}
 
+	
 	@ApiOperation(value = "Saves share connected to tags and user. Adds non-existing topics")
 	@PostMapping
 	public CompletableFuture<ResponseEntity<?>> insert(final Share share) {
 		return null;
 	}
 
+	
 	// curl -X POST -H 'Dear-User: Alpha' -H 'Content-Type: application/json' -i
 	// http://localhost:8080/shares/private --data '{"title":"some
 	// title","url":"https://www.some-url.com/","topics":["On Cooking","Non existing
@@ -59,6 +62,7 @@ public class ShareController {
 				.exceptionally(handleFailure);
 	}
 
+	
 	// curl -X POST -H 'Dear-User: Alpha' -H 'Content-Type: application/json' -i
 	// http://localhost:8080/shares/directed --data
 	// '{"title":"sometitle","url":"https://www.some-url.com/","topics":["On

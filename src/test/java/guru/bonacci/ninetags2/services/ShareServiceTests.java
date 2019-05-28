@@ -3,6 +3,7 @@ package guru.bonacci.ninetags2.services;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
@@ -12,8 +13,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.SharedWith;
@@ -28,10 +31,14 @@ import guru.bonacci.ninetags2.web.FakeSecurityContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration("/test-context.xml")
+@Transactional
 public class ShareServiceTests {
 
 	@Autowired
-	ShareService sservice;
+	ShareService shareService;
+
+	@Autowired
+	PagedShareService pagedShareService;
 
 	@Autowired
 	FakeSecurityContext securityContext;
@@ -51,6 +58,7 @@ public class ShareServiceTests {
 	_User sender;
 	String username1 = "Beta", username2 = "Gamma";
 
+	
 	@Before
 	public void setUp() {
 		userRepo.deleteAll();
@@ -67,11 +75,11 @@ public class ShareServiceTests {
 	}
 
 	@Test
-	public void testInsertPrivateShare() throws InterruptedException, ExecutionException {
+	public void testInsertAndGetPrivateShare() throws InterruptedException, ExecutionException {
 		String title = "test share";
 		Share.ShareBuilder share = Share.builder().title(title);
 		
-		Long shareId = sservice.insertPrivate(share, asList(new Topic("test topic 1"), new Topic("test topic 2"))).get();
+		Long shareId = shareService.insertPrivate(share, asList(new Topic("test topic 1"), new Topic("test topic 2"))).get();
 
 		Iterator<Topic> ts = topicRepo.findAll().iterator();
 		ts.next(); ts.next();
@@ -84,14 +92,18 @@ public class ShareServiceTests {
 		assertEquals(title, sw.getShare().getTitle());
 		assertEquals(sender.getName(), sw.getWith().getName());
 		assertFalse(sws.hasNext());
+		
+		Share result = pagedShareService.getPrivateShares(PageRequest.of(0, 1)).get().getContent().get(0);
+		assertNotNull(result.getBy());
+		assertEquals(2, result.getAbout().size());
 	}
 	
 	@Test
-	public void testInsertDirectedShare() throws InterruptedException, ExecutionException {
+	public void testInsertAndGetDirectedShare() throws InterruptedException, ExecutionException {
 		String title = "test share";
 		Share.ShareBuilder share = Share.builder().title(title);
 		
-		Long shareId = sservice.insertDirected(share, asList(new Topic("test topic 1"), new Topic("test topic 2")), asList(username1, username2)).get();
+		Long shareId = shareService.insertDirected(share, asList(new Topic("test topic 1"), new Topic("test topic 2")), asList(username1, username2)).get();
 
 		Iterator<Topic> ts = topicRepo.findAll().iterator();
 		ts.next(); ts.next();
@@ -108,6 +120,15 @@ public class ShareServiceTests {
 		assertEquals(title, sw.getShare().getTitle());
 		assertEquals(username2, sw.getWith().getName());
 		assertFalse(sws.hasNext());
-	}
+		
+		Share result = pagedShareService.getSentDirectedShares(PageRequest.of(0, 1)).get().getContent().get(0);
+		assertNotNull(result.getBy());
+		assertEquals(2, result.getAbout().size());
 
+		// change to receiving user
+		securityContext.setAuthentication(username1);
+		result = pagedShareService.getReceivedDirectedShares(PageRequest.of(0, 1)).get().getContent().get(0);
+		assertNotNull(result.getBy());
+		assertEquals(2, result.getAbout().size());
+	}
 }
