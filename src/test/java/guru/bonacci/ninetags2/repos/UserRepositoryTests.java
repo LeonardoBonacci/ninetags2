@@ -76,7 +76,6 @@ public class UserRepositoryTests {
 		String name = "Alpha";
 		Page<_User> results = repo.getFollowed(name, PageRequest.of(0, 9)).get();
 		assertEquals(9, results.getNumberOfElements());
-		assertEquals(11, results.getTotalElements());
 		
 		results = repo.getFollowed(name, PageRequest.of(1, 9)).get();
 		assertEquals(2, results.getNumberOfElements());

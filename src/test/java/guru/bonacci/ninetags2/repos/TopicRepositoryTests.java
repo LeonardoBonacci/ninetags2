@@ -56,7 +56,6 @@ public class TopicRepositoryTests {
 		String name = "Alpha";
 		Page<Topic> results = trepo.getFollowed(name, PageRequest.of(0, 9)).get();
 		assertEquals(9, results.getNumberOfElements());
-		assertEquals(10, results.getTotalElements());
 		
 		results = trepo.getFollowed(name, PageRequest.of(1, 9)).get();
 		assertEquals(1, results.getNumberOfElements());

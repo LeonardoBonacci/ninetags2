@@ -32,9 +32,7 @@ public interface UserRepository extends Neo4jRepository<_User, Long> {
 					"WHERE user <> followed " + 
 					"RETURN followed " + 
 					"ORDER BY follows.prio ",
-		   countQuery = "MATCH (user:User {name:{name}})-[follows:FOLLOWS]->(followed:User) " + 
-					"WHERE user <> followed " + 
-					"RETURN COUNT(followed) " )
+			countQuery = "RETURN COUNT(0) " )
 	CompletableFuture<Page<_User>> getFollowed(@Param("name") String name, Pageable pageRequest);
 
 	

@@ -19,8 +19,7 @@ public interface TopicRepository extends Neo4jRepository<Topic, Long> {
 					"WITH interest, t " + 
 					"RETURN t " + 
 					"ORDER BY interest.prio ",
-		   countQuery = "MATCH (user:User {name:{name}})-[:INTERESTED_IN]->(t:Topic) " + 
-					"RETURN COUNT(t) " )
+			countQuery = "RETURN COUNT(0) " )
 	CompletableFuture<Page<Topic>> getFollowed(@Param("name") String name, Pageable pageRequest);
 
 }

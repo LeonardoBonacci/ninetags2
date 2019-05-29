@@ -98,6 +98,12 @@ public class ShareService {
 
 	@Transactional
 	public CompletableFuture<Void> delete(final Long id) {
+		shareRepo.findById(id)
+			.ifPresent(persisted -> {
+				if (!persisted.getBy().getName().equalsIgnoreCase(context.getAuthentication()))
+					throw new AuthorizationViolationException("You cannot delete what is not yours..");
+			});
+
 		shareRepo.deleteById(id);
 		return completedFuture(null);
 	}
