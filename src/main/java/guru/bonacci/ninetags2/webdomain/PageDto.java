@@ -3,6 +3,8 @@ package guru.bonacci.ninetags2.webdomain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import lombok.NonNull;
 import lombok.Value;
 
@@ -28,5 +30,11 @@ public class PageDto<T> {
 		this.top.addAll(top);
 		this.middle.addAll(middle);
 		this.bottom.addAll(bottom);
+	}
+	
+	public PageDto(Page<T> top, Page<T> middle, Page<T> bottom) {
+		this.top.addAll(top.getContent());
+		this.middle.addAll(middle.getContent());
+		this.bottom.addAll(bottom.getContent());
 	}
 }

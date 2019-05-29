@@ -30,7 +30,7 @@ public class PagedShareController {
 	@ApiOperation(value = "Retrieve your public shares")
     @GetMapping("/sent")
     public CompletableFuture<ResponseEntity<?>> getSentShares(final Pageable pageRequest) {
-		return service.getSentShares(pageRequest)
+		return service.retrieveSentShares(pageRequest)
 				.thenApply(results -> new PageDto<Share>(results.getContent()))
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
@@ -41,7 +41,7 @@ public class PagedShareController {
 	@ApiOperation(value = "Bookmarks: retrieve your shares. No other user has access to these shares")
     @GetMapping("/private")
     public CompletableFuture<ResponseEntity<?>> getShares(final Pageable pageRequest) {
-		return service.getPrivateShares(pageRequest)
+		return service.retrievePrivateShares(pageRequest)
 				.thenApply(results -> new PageDto<Share>(results.getContent()))
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
@@ -51,7 +51,7 @@ public class PagedShareController {
 	@ApiOperation(value = "Mailing/directed shares: sent-items")
     @GetMapping("/directed")
     public CompletableFuture<ResponseEntity<?>> getSentDirectedShares(final Pageable pageRequest) {
-		return service.getSentDirectedShares(pageRequest)
+		return service.retrieveSentDirectedShares(pageRequest)
 				.thenApply(results -> new PageDto<Share>(results.getContent()))
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
@@ -61,15 +61,33 @@ public class PagedShareController {
 	@ApiOperation(value = "Mailing/directed shares: inbox")
     @GetMapping("/inbox")
     public CompletableFuture<ResponseEntity<?>> getReceivedDirectedShares(final Pageable pageRequest) {
-		return service.getReceivedDirectedShares(pageRequest)
+		return service.retrieveReceivedDirectedShares(pageRequest)
 				.thenApply(results -> new PageDto<Share>(results.getContent()))
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
+    }
+
+	// curl -X GET -H 'Dear-User: Alpha' -i 'http://localhost:8080/shares/paged/userperspective?page=0''
+	@ApiOperation(value = "topic blabla")
+    @GetMapping("/userperspective")
+    public CompletableFuture<ResponseEntity<?>> getUserPerspective(final Pageable pageRequest) {
+		return service.retrieveUserPerspective(pageRequest)
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
+    }
+
+	// curl -X GET -H 'Dear-User: Alpha' -i 'http://localhost:8080/shares/paged/topicperspective?page=0''
+	@ApiOperation(value = "user blabla")
+    @GetMapping("/topicperspective")
+    public CompletableFuture<ResponseEntity<?>> getTopicPerspective(final Pageable pageRequest) {
+		return service.retrieveTopicPerspective(pageRequest)
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
     }
 
 	@ApiOperation(value = "Most liked shares today")
     @GetMapping("/hot")
-    public CompletableFuture<ResponseEntity<?>> getHotShares(final Pageable pageable) {
-    	return null;
+    public CompletableFuture<ResponseEntity<?>> getHotShares(final Pageable pageRequest) {
+		return null; 
     }
 }

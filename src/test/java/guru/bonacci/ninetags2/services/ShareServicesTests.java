@@ -73,7 +73,7 @@ public class ShareServicesTests {
 	}
 
 	@Test
-	public void testInsertAndGetShare() throws InterruptedException, ExecutionException {
+	public void testInsertAndRetrieveShare() throws InterruptedException, ExecutionException {
 		String title = "test share";
 		Share.ShareBuilder share = Share.builder().title(title);
 		
@@ -85,7 +85,7 @@ public class ShareServicesTests {
 		
 		assertEquals(title, shareRepo.findById(shareId).get().getTitle());
 
-		Share result = pagedShareService.getSentShares(PageRequest.of(0, 1)).get().getContent().get(0);
+		Share result = pagedShareService.retrieveSentShares(PageRequest.of(0, 1)).get().getContent().get(0);
 		assertNotNull(result.getBy());
 		assertFalse(result.getAbout().isEmpty());
 	}
@@ -118,7 +118,7 @@ public class ShareServicesTests {
 	}
 	
 	@Test
-	public void testInsertAndGetPrivateShare() throws InterruptedException, ExecutionException {
+	public void testInsertAndRetrievePrivateShare() throws InterruptedException, ExecutionException {
 		String title = "test share";
 		Share.ShareBuilder share = Share.builder().title(title);
 		
@@ -136,13 +136,13 @@ public class ShareServicesTests {
 		assertEquals(sender.getName(), sw.getWith().getName());
 		assertFalse(sws.hasNext());
 		
-		Share result = pagedShareService.getPrivateShares(PageRequest.of(0, 1)).get().getContent().get(0);
+		Share result = pagedShareService.retrievePrivateShares(PageRequest.of(0, 1)).get().getContent().get(0);
 		assertNotNull(result.getBy());
 		assertFalse(result.getAbout().isEmpty());
 	}
 	
 	@Test
-	public void testInsertAndGetDirectedShare() throws InterruptedException, ExecutionException {
+	public void testInsertAndRetrieveDirectedShare() throws InterruptedException, ExecutionException {
 		String title = "test share";
 		Share.ShareBuilder share = Share.builder().title(title);
 		
@@ -164,13 +164,13 @@ public class ShareServicesTests {
 		assertEquals(username2, sw.getWith().getName());
 		assertFalse(sws.hasNext());
 		
-		Share result = pagedShareService.getSentDirectedShares(PageRequest.of(0, 1)).get().getContent().get(0);
+		Share result = pagedShareService.retrieveSentDirectedShares(PageRequest.of(0, 1)).get().getContent().get(0);
 		assertNotNull(result.getBy());
 		assertFalse(result.getAbout().isEmpty());
 
 		// change to receiving user
 		securityContext.setAuthentication(username1);
-		result = pagedShareService.getReceivedDirectedShares(PageRequest.of(0, 1)).get().getContent().get(0);
+		result = pagedShareService.retrieveReceivedDirectedShares(PageRequest.of(0, 1)).get().getContent().get(0);
 		assertNotNull(result.getBy());
 		assertFalse(result.getAbout().isEmpty());
 	}

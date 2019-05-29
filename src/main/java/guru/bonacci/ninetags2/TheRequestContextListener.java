@@ -7,5 +7,5 @@ import org.springframework.web.context.request.RequestContextListener;
 
 @Configuration
 @WebListener
-public class MyRequestContextListener extends RequestContextListener {
+public class TheRequestContextListener extends RequestContextListener {
 }

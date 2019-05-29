@@ -13,26 +13,6 @@ LIMIT 2
 
 
 // TOPIC PERSPECTIVE
-MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(:Tag)<-[:IS_TOPIC]-(share:Share)
-WITH user, share
-MATCH (share)<-[:SHARED]-(followed:User)<-[:FOLLOWS]-(user)
-WHERE user <> followed
-RETURN DISTINCT(share)
-ORDER BY ID(share) DESC
-SKIP 0
-LIMIT 3
-
-MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(:Tag)<-[:IS_TOPIC]-(share:Share)
-WITH user, share
-OPTIONAL MATCH (share)<-[SHARED]-(followed:User)<-[follows:FOLLOWS]-(user)
-WHERE user <> followed
-WITH share, follows
-WHERE follows IS NULL 
-RETURN DISTINCT(share)
-ORDER BY ID(share) DESC
-SKIP 0
-LIMIT 3
-
 CALL ga.timetree.now({}) 
 YIELD instant as today
 MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(:Tag)<-[:IS_TOPIC]-(share:Share)-[:AT_TIME]->(today)
