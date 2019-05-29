@@ -1,29 +1,3 @@
-// USERS PERSPECTIVE
-CALL ga.timetree.now({}) 
-YIELD instant as today
-MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)-[:AT_TIME]->(today)
-WHERE user <> followed
-WITH share
-MATCH (share)<-[likes:LIKED]-(:User)
-WITH DISTINCT(share) AS shares, COUNT(likes) AS nrLikes
-RETURN shares
-ORDER BY nrLikes DESC
-SKIP 0
-LIMIT 2
-
-
-// TOPIC PERSPECTIVE
-CALL ga.timetree.now({}) 
-YIELD instant as today
-MATCH (user:User {name:'Alpha'})-[:INTERESTED_IN]->(:Tag)<-[:IS_TOPIC]-(share:Share)-[:AT_TIME]->(today)
-WITH share
-MATCH (share)<-[likes:LIKED]-(:User)
-WITH DISTINCT(share) AS shares, COUNT(likes) AS nrLikes
-RETURN shares
-ORDER BY nrLikes DESC
-SKIP 0
-LIMIT 2
-
 // SPACE TIME SEARCH
 MATCH (share:Share)-[availableAt:AVAILABLE_AT]->(shareLoc:Location), (share)-[:AVAILABLE_DURING]->(sharedTime:Interval)
 WITH share, point({ longitude: 5.1859604, latitude: 52.037247 }) AS here, point({ longitude: shareLoc.longitude, latitude: shareLoc.latitude }) AS there
@@ -36,6 +10,8 @@ ORDER BY ID(share) DESC
 All the users that have shared a certain topic, count order by nr or times
 On all the topics that a certain user has shared, count order by nr or times
 
+> (input) validation
+> presave (or current timestamp) and postsave event (relate topics)
 
 // USEFULL
 CALL dbms.procedures() YIELD name, signature

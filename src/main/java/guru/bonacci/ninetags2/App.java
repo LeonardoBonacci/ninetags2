@@ -2,15 +2,19 @@ package guru.bonacci.ninetags2;
 
 import static java.util.Arrays.asList;
 
+import java.util.Arrays;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import guru.bonacci.ninetags2.domain.Likes;
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.SharedWith;
 import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.domain._User;
+import guru.bonacci.ninetags2.repos.LikesRepository;
 import guru.bonacci.ninetags2.repos.ShareRepository;
 import guru.bonacci.ninetags2.repos.SharedWithRepository;
 import guru.bonacci.ninetags2.repos.TopicRepository;
@@ -34,12 +38,17 @@ public class App {
 	}
 
 	@Bean
-	CommandLineRunner init(UserRepository userRepo, TopicRepository topicRepo, ShareRepository shareRepo, SharedWithRepository sharedWithRepo) {
+	CommandLineRunner init(UserRepository userRepo, 
+							TopicRepository topicRepo, 
+							ShareRepository shareRepo, 
+							SharedWithRepository sharedWithRepo,
+							LikesRepository likesRepo) {
 		return args -> {
 			userRepo.deleteAll();
 			topicRepo.deleteAll();
 			shareRepo.deleteAll();
 			sharedWithRepo.deleteAll();
+			likesRepo.deleteAll();
 			
 			val culture = Topic.builder().name("Culture").build();
 			val cooking = Topic.builder().name("Cooking").build();
@@ -75,25 +84,31 @@ public class App {
 			beta.addFollows(alpha);
 			userRepo.saveAll(asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
 
-			val sculture = Share.builder().title("Culture").by(alpha).build();
-			val scooking = Share.builder().title("Cooking").by(alpha).build();
-			val shobbies = Share.builder().title("Hobbies").by(alpha).build();
-			val sliterature = Share.builder().title("Literature").by(alpha).build();
-			val sart = Share.builder().title("On Art").by(alpha).build();
-			val sentertainment = Share.builder().title("On Entertainment").by(alpha).build();
-			val sfiction = Share.builder().title("On Fiction").by(alpha).build();
-			val sgame = Share.builder().title("On Game").by(alpha).build();
-			val spoetry = Share.builder().title("On Poetry").by(alpha).build();
-			val ssports = Share.builder().title("On Sports").by(alpha).build();
-			val sdance = Share.builder().title("On Dance").by(alpha).build();
+			val sculture = Share.builder().title("Culture").by(alpha).time(System.currentTimeMillis()).build();
+			val scooking = Share.builder().title("Cooking").by(alpha).time(System.currentTimeMillis()).build();
+			val shobbies = Share.builder().title("Hobbies").by(alpha).time(System.currentTimeMillis()).build();
+			val sliterature = Share.builder().title("Literature").by(alpha).time(System.currentTimeMillis()).build();
+			val sentertainment = Share.builder().title("On Entertainment").by(alpha).time(System.currentTimeMillis()).build();
+			val sfiction = Share.builder().title("On Fiction").by(alpha).time(System.currentTimeMillis()).build();
+			val sgame = Share.builder().title("On Game").by(alpha).time(System.currentTimeMillis()).build();
+			val spoetry = Share.builder().title("On Poetry").by(alpha).time(System.currentTimeMillis()).build();
+
+			val sart = Share.builder().title("On Art").by(beta).about(Arrays.asList(art, game)).time(System.currentTimeMillis()).build();
+			val sdance = Share.builder().title("On Dance").by(gamma).about(Arrays.asList(art, game)).time(System.currentTimeMillis()).build();
+			val ssports = Share.builder().title("On Sports").by(zeta).about(Arrays.asList(game)).time(System.currentTimeMillis()).build();
 			shareRepo.saveAll(asList(sculture, scooking, shobbies, sliterature, sart, sentertainment, sfiction, sgame, spoetry, ssports, sdance));
 
 			val swculture = SharedWith.builder().share(sculture).with(alpha).build();
 			val swcooking = SharedWith.builder().share(scooking).with(alpha).build();
 			val swhobbies = SharedWith.builder().share(shobbies).with(alpha).build();
 			val swliterature = SharedWith.builder().share(sliterature).with(beta).build();
-
 			sharedWithRepo.saveAll(asList(swculture, swcooking, swhobbies, swliterature));
+			
+			val artl1 = Likes.builder().user(alpha).share(sart).build();
+			val artl2 = Likes.builder().user(gamma).share(sart).build();
+			val dancel = Likes.builder().user(beta).share(sdance).build();
+			val gamel = Likes.builder().user(beta).share(ssports).build();
+			likesRepo.saveAll(asList(artl1, artl2, dancel, gamel));
 		};
 	}
 }

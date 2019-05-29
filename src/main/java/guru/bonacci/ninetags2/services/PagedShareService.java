@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import guru.bonacci.ninetags2.domain.Share;
+import guru.bonacci.ninetags2.repos.LikesRepository;
 import guru.bonacci.ninetags2.repos.SharePerspectiveRepository;
 import guru.bonacci.ninetags2.repos.ShareRepository;
 import guru.bonacci.ninetags2.web.FakeSecurityContext;
@@ -25,6 +26,7 @@ public class PagedShareService {
 
 	private final ShareRepository shareRepo;
 	private final SharePerspectiveRepository sharedPerspectiveRepo;
+	private final LikesRepository likesRepo;
 	private final FakeSecurityContext context; 
 
 	
@@ -35,7 +37,7 @@ public class PagedShareService {
 		PageRequest pr = PageRequest.of(pageRequest.getPageNumber(), 3);
 		CompletableFuture<Page<Share>> top = sharedPerspectiveRepo.getFollowedAndInterested(username, pr);
 		CompletableFuture<Page<Share>> middle = sharedPerspectiveRepo.getFollowedAndNotInterested(username, pr);
-		CompletableFuture<Page<Share>> bottom = sharedPerspectiveRepo.getFollowedAndNotInterested(username, pr); //TODO replace
+		CompletableFuture<Page<Share>> bottom = likesRepo.getMostLikedFromFollowed(username, pr); 
 		
 		CompletionStage<PageDto<Share>> combinedPageResult = 
 		CompletableFuture.allOf(top, middle, bottom)
@@ -52,7 +54,7 @@ public class PagedShareService {
 		PageRequest pr = PageRequest.of(pageRequest.getPageNumber(), 3);
 		CompletableFuture<Page<Share>> top = sharedPerspectiveRepo.getInterestedAndFollowed(username, pr);
 		CompletableFuture<Page<Share>> middle = sharedPerspectiveRepo.getInterestedAndNotFollowed(username, pr);
-		CompletableFuture<Page<Share>> bottom = sharedPerspectiveRepo.getInterestedAndNotFollowed(username, pr); //TODO replace
+		CompletableFuture<Page<Share>> bottom = likesRepo.getMostLikedFromInterests(username, pr); 
 
 		CompletionStage<PageDto<Share>> combinedPageResult = 
 		CompletableFuture.allOf(top, middle, bottom)

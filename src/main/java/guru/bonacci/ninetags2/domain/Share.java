@@ -7,7 +7,10 @@ import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -29,6 +32,10 @@ public class Share {
     @ApiModelProperty(notes = "whatever it is named by the user")
 	@Index(unique=true) 
 	String title;
+
+    @JsonIgnore
+	@Property
+	Long time;
 
     @ApiModelProperty(notes = "url pointing to the content")
 	String url;
