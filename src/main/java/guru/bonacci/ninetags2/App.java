@@ -34,12 +34,12 @@ public class App {
 	}
 
 	@Bean
-	CommandLineRunner init(UserRepository urepo, TopicRepository trepo, ShareRepository srepo, SharedWithRepository swrepo) {
+	CommandLineRunner init(UserRepository userRepo, TopicRepository topicRepo, ShareRepository shareRepo, SharedWithRepository sharedWithRepo) {
 		return args -> {
-			urepo.deleteAll();
-			trepo.deleteAll();
-			srepo.deleteAll();
-			swrepo.deleteAll();
+			userRepo.deleteAll();
+			topicRepo.deleteAll();
+			shareRepo.deleteAll();
+			sharedWithRepo.deleteAll();
 			
 			val culture = Topic.builder().name("Culture").build();
 			val cooking = Topic.builder().name("Cooking").build();
@@ -52,7 +52,7 @@ public class App {
 			val poetry = Topic.builder().name("Poetry").build();
 			val sports = Topic.builder().name("Sports").build();
 			val dance = Topic.builder().name("Dance").build();
-			trepo.saveAll(asList(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports, dance));
+			topicRepo.saveAll(asList(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports, dance));
 
 			
 			val alpha = _User.builder().name("Alpha").build();
@@ -73,7 +73,7 @@ public class App {
 			alpha.addInterests(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports);
 			beta.addFollows(gamma);
 			beta.addFollows(alpha);
-			urepo.saveAll(asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
+			userRepo.saveAll(asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
 
 			val sculture = Share.builder().title("Culture").by(alpha).build();
 			val scooking = Share.builder().title("Cooking").by(alpha).build();
@@ -86,14 +86,14 @@ public class App {
 			val spoetry = Share.builder().title("On Poetry").by(alpha).build();
 			val ssports = Share.builder().title("On Sports").by(alpha).build();
 			val sdance = Share.builder().title("On Dance").by(alpha).build();
-			srepo.saveAll(asList(sculture, scooking, shobbies, sliterature, sart, sentertainment, sfiction, sgame, spoetry, ssports, sdance));
+			shareRepo.saveAll(asList(sculture, scooking, shobbies, sliterature, sart, sentertainment, sfiction, sgame, spoetry, ssports, sdance));
 
 			val swculture = SharedWith.builder().share(sculture).with(alpha).build();
 			val swcooking = SharedWith.builder().share(scooking).with(alpha).build();
 			val swhobbies = SharedWith.builder().share(shobbies).with(alpha).build();
 			val swliterature = SharedWith.builder().share(sliterature).with(beta).build();
 
-			swrepo.saveAll(asList(swculture, swcooking, swhobbies, swliterature));
+			sharedWithRepo.saveAll(asList(swculture, swcooking, swhobbies, swliterature));
 		};
 	}
 }

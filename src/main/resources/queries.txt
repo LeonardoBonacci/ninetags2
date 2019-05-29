@@ -1,24 +1,4 @@
 // USERS PERSPECTIVE
-MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)
-WHERE user <> followed
-WITH user, share
-MATCH (share)-[IS_TOPIC]->(:Tag)<-[:INTERESTED_IN]-(user)
-RETURN DISTINCT(share)
-ORDER BY ID(share) DESC
-SKIP 0
-LIMIT 3
-
-MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)
-WHERE user <> followed
-WITH user, share
-OPTIONAL MATCH (share)-[IS_TOPIC]->(:Tag)<-[interest:INTERESTED_IN]-(user)
-WITH share, interest
-WHERE interest IS NULL 
-RETURN DISTINCT(share)
-ORDER BY ID(share) DESC
-SKIP 0
-LIMIT 3
-
 CALL ga.timetree.now({}) 
 YIELD instant as today
 MATCH (user:User {name:'Alpha'})-[:FOLLOWS]->(followed:User)-[:SHARED]->(share:Share)-[:AT_TIME]->(today)
@@ -72,10 +52,12 @@ AND (sharedTime.from IS NULL OR timestamp() > sharedTime.from) AND (sharedTime.u
 RETURN share
 ORDER BY ID(share) DESC
 
+// OTHERS
+All the users that have shared a certain topic, count order by nr or times
+On all the topics that a certain user has shared, count order by nr or times
+
 
 // USEFULL
 CALL dbms.procedures() YIELD name, signature
 WHERE name='dbms.listConfig'
 RETURN signature
-
-match (n) detach delete n

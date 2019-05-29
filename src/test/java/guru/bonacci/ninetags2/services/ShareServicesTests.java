@@ -87,7 +87,7 @@ public class ShareServicesTests {
 
 		Share result = pagedShareService.getSentShares(PageRequest.of(0, 1)).get().getContent().get(0);
 		assertNotNull(result.getBy());
-		assertNotNull(result.getAbout());
+		assertFalse(result.getAbout().isEmpty());
 	}
 
 	@Test
@@ -138,7 +138,7 @@ public class ShareServicesTests {
 		
 		Share result = pagedShareService.getPrivateShares(PageRequest.of(0, 1)).get().getContent().get(0);
 		assertNotNull(result.getBy());
-		assertNotNull(result.getAbout());
+		assertFalse(result.getAbout().isEmpty());
 	}
 	
 	@Test
@@ -166,12 +166,12 @@ public class ShareServicesTests {
 		
 		Share result = pagedShareService.getSentDirectedShares(PageRequest.of(0, 1)).get().getContent().get(0);
 		assertNotNull(result.getBy());
-		assertNotNull(result.getAbout());
+		assertFalse(result.getAbout().isEmpty());
 
 		// change to receiving user
 		securityContext.setAuthentication(username1);
 		result = pagedShareService.getReceivedDirectedShares(PageRequest.of(0, 1)).get().getContent().get(0);
 		assertNotNull(result.getBy());
-		assertNotNull(result.getAbout());
+		assertFalse(result.getAbout().isEmpty());
 	}
 }
