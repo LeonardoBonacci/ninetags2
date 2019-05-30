@@ -19,14 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TopicService {
 
-	private final TopicRepository repo;
+	private final TopicRepository topicRepo;
 	private final FakeSecurityContext context;
 	
 
 	@Transactional(readOnly = true)
 	public CompletableFuture<Page<Topic>> getFollowed(final Pageable pageRequest) {
-		val followers = repo.getFollowed(context.getAuthentication(), pageRequest);
+		val followers = topicRepo.getFollowed(context.getAuthentication(), pageRequest);
 		return followers.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found followed topic " + result)));
 	}
-
 }

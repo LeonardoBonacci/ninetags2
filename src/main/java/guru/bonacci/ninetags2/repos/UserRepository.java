@@ -17,10 +17,10 @@ import guru.bonacci.ninetags2.domain._User;
 public interface UserRepository extends Neo4jRepository<_User, Long> {
 
 
-	CompletableFuture<Optional<_User>> findByName(String name);
+	Optional<_User> findByNameIgnoreCase(String name);
 
 	
-	CompletableFuture<List<_User>> findByNameIn(List<String> name);
+	List<_User> findByNameIn(List<String> name);
 
 	
 	@Query( "MATCH (User {name:{name}})<-[:FOLLOWS]-(follower:User) " + 

@@ -76,11 +76,11 @@ public class ShareService {
 	@Transactional
 	public CompletableFuture<Long> insertDirected(final Share.ShareBuilder shareBuilder, final List<Topic> topics, final List<String> toUsernames) {
 		_User fromMe = context.getTheUser();
-		CompletableFuture<List<_User>> toUs = userRepo.findByNameIn(toUsernames);
+		List<_User> toUs = userRepo.findByNameIn(toUsernames);
 		
 		val savedTopics = topicRepo.saveAll(topics);
 		val share = shareBuilder.by(fromMe).about(stream(savedTopics.spliterator(), false).collect(toList())).build();
-		toUs.whenComplete((result, ex)  -> result.forEach(toMe -> sharedWithRepo.save(SharedWith.builder().share(share).with(toMe).build())));
+		toUs.forEach(toMe -> sharedWithRepo.save(SharedWith.builder().share(share).with(toMe).build()));
 
 		val id = completedFuture(shareRepo.save(share).getId());
 		applicationEventPublisher.publishEvent(new CreationEvent<Share>(share, "directed insert"));

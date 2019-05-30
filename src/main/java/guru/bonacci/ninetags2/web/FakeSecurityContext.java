@@ -1,7 +1,6 @@
 package guru.bonacci.ninetags2.web;
 
 import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutionException;
 
 import org.neo4j.graphdb.security.AuthorizationViolationException;
 
@@ -25,8 +24,8 @@ public class FakeSecurityContext {
 
 	public _User getTheUser() {
 		try {
-			return userRepo.findByName(authentication).get().get();
-		} catch (InterruptedException | ExecutionException | NoSuchElementException e) {
+			return userRepo.findByNameIgnoreCase(authentication).get();
+		} catch (NoSuchElementException e) {
 			e.printStackTrace();
 			throw new AuthorizationViolationException("No permission..");
 		} 

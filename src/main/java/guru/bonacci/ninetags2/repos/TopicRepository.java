@@ -1,5 +1,6 @@
 package guru.bonacci.ninetags2.repos;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +16,9 @@ import guru.bonacci.ninetags2.domain.Topic;
 public interface TopicRepository extends Neo4jRepository<Topic, Long> {
 
 
+	Optional<Topic> findByNameIgnoreCase(String name);
+
+	
 	@Query(value = "MATCH (user:User {name:{name}})-[interest:INTERESTED_IN]->(t:Topic) " + 
 					"WITH interest, t " + 
 					"RETURN t " + 

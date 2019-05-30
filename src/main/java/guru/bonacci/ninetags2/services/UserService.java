@@ -1,5 +1,7 @@
 package guru.bonacci.ninetags2.services;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import guru.bonacci.ninetags2.domain._User;
+import guru.bonacci.ninetags2.repos.TopicRepository;
 import guru.bonacci.ninetags2.repos.UserRepository;
 import guru.bonacci.ninetags2.web.FakeSecurityContext;
 import lombok.RequiredArgsConstructor;
@@ -22,29 +25,79 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserService {
 
-	private final UserRepository repo;
+	private final UserRepository userRepo;
+	private final TopicRepository topicRepo;
 	private final FakeSecurityContext context;
 	
 
 	@Transactional(readOnly = true)
-	public CompletableFuture<Optional<_User>> getByName(String name) {
+	public CompletableFuture<Optional<_User>> retrieveByName(String name) {
 		if (!name.equalsIgnoreCase(context.getAuthentication()))
 			throw new AuthorizationViolationException("No permission..");
 		
-		val user = repo.findByName(name);
-		return user.whenComplete((result, ex) -> result.ifPresent(us -> log.info("found user " + us)));
+		val user = userRepo.findByNameIgnoreCase(name);
+		return CompletableFuture.completedFuture(user);
 	}
 
+	
 	@Transactional(readOnly = true)
-	public CompletableFuture<List<_User>> getFollowed() {
-		val followed = repo.getFollowers(context.getAuthentication());
+	public CompletableFuture<List<_User>> retrieveFollowed() {
+		val followed = userRepo.getFollowers(context.getAuthentication());
 		return followed.whenComplete((results, ex) -> results.forEach(result -> log.info("found follower " + result)));
 	}
 
+	
 	@Transactional(readOnly = true)
-	public CompletableFuture<Page<_User>> getFollowed(final Pageable pageRequest) {
-		val followed = repo.getFollowed(context.getAuthentication(), pageRequest);
+	public CompletableFuture<Page<_User>> retrieveFollowed(final Pageable pageRequest) {
+		val followed = userRepo.getFollowed(context.getAuthentication(), pageRequest);
 		return followed.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found followed user " + result)));
 	}
 
+	
+	@Transactional
+	public CompletableFuture<Void> follows(final String followMe) {
+		_User follower = context.getTheUser();
+
+		userRepo.findByNameIgnoreCase(followMe).ifPresent(followed -> {
+			follower.addFollows(followed);
+			userRepo.save(follower);
+		});
+		return completedFuture(null);
+	}
+
+	
+	@Transactional
+	public CompletableFuture<Void> unfollows(final String doNotfollowMe) {
+		_User follower = context.getTheUser();
+
+		userRepo.findByNameIgnoreCase(doNotfollowMe).ifPresent(unfollowed -> {
+			follower.deleteFollows(unfollowed);
+			userRepo.save(follower);
+		});	
+		return completedFuture(null);
+	}
+
+
+	@Transactional
+	public CompletableFuture<Void> interests(final String followMe) {
+		_User follower = context.getTheUser();
+
+		topicRepo.findByNameIgnoreCase(followMe).ifPresent(followed -> {
+			follower.addInterests(followed);
+			userRepo.save(follower);
+		});	
+		return completedFuture(null);
+	}
+	
+	
+	@Transactional
+	public CompletableFuture<Void> uninterests(final String doNotfollowMe) {
+		_User follower = context.getTheUser();
+
+		topicRepo.findByNameIgnoreCase(doNotfollowMe).ifPresent(unfollowed -> {
+			follower.deleteInterests(unfollowed);
+			userRepo.save(follower);
+		});	
+		return completedFuture(null);
+	}
 }

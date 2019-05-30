@@ -1,7 +1,9 @@
 package guru.bonacci.ninetags2.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.validation.constraints.NotBlank;
 
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
@@ -28,16 +30,17 @@ public class _User {
 	@Id @GeneratedValue
 	Long id;
 	
-	@Index(unique=true) 
+	@Index(unique = true) 
+	@NotBlank
 	String name;
 
 	@Relationship(type = "FOLLOWS")
 	@Builder.Default 
-	List<Follows> follows = new ArrayList<>();
+	Set<Follows> follows = new HashSet<>();
 
 	@Relationship(type = "INTERESTED_IN")
 	@Builder.Default 
-	List<Interests> interests = new ArrayList<>();
+	Set<Interests> interests = new HashSet<>();
 	
 
 	public void addFollows(@NonNull _User... followUs) {
@@ -49,6 +52,15 @@ public class _User {
 		this.follows.add(Follows.builder().follower(this).followed(followMe).prio(this.follows.size()).build());
 	}	
 
+	public void deleteFollows(@NonNull _User... doNotfollowUs) {
+		for (_User doNotFollowMe : doNotfollowUs)
+			deleteFollows(doNotFollowMe);
+	}	
+
+	private void deleteFollows(@NonNull _User doNotfollowMe) {
+		this.follows.removeIf(f -> f.getFollowed().getName().equals(doNotfollowMe.getName()));
+	}	
+
 	public void addInterests(@NonNull Topic... followUs) {
 		for (Topic followMe : followUs)
 			addInterest(followMe);
@@ -56,5 +68,14 @@ public class _User {
 
 	private void addInterest(@NonNull Topic followMe) {
 		this.interests.add(Interests.builder().follower(this).followed(followMe).prio(this.interests.size()).build());
+	}	
+	
+	public void deleteInterests(@NonNull Topic... doNotfollowUs) {
+		for (Topic doNotFollowMe : doNotfollowUs)
+			deleteInterest(doNotFollowMe);
+	}	
+
+	private void deleteInterest(@NonNull Topic doNotfollowMe) {
+		this.interests.removeIf(i -> i.getFollowed().getName().equals(doNotfollowMe.getName()));
 	}	
 }

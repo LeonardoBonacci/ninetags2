@@ -1,14 +1,13 @@
-// queries
->All the users that have shared a certain topic, count order by nr or times
->On all the topics that a certain user has shared, count order by nr or times
->find (like) on topics
+> query All the users that have shared a certain topic, count order by nr or times
+> query On all the topics that a certain user has shared, count order by nr or times
+> query find (like) on topics
 > like service
 > forshare
-> follow user post
-> follow topic post
 > prioritizeFollowed
 > prioritizeInterests
 > getHotShares
 > getHotTopics
 > getHotUsers
+
+> load script
 
