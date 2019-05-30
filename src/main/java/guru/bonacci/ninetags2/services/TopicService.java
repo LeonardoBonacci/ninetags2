@@ -1,5 +1,6 @@
 package guru.bonacci.ninetags2.services;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.data.domain.Page;
@@ -24,7 +25,14 @@ public class TopicService {
 	
 
 	@Transactional(readOnly = true)
-	public CompletableFuture<Page<Topic>> getFollowed(final Pageable pageRequest) {
+	public CompletableFuture<List<Topic>> retrieveByName(final String topic) {
+		val topics = topicRepo.findByNameContaining(topic);
+		return topics.whenComplete((results, ex) -> results.stream().forEach(result -> log.debug("found topic " + result)));
+	}
+
+	
+	@Transactional(readOnly = true)
+	public CompletableFuture<Page<Topic>> retrieveFollowed(final Pageable pageRequest) {
 		val followers = topicRepo.getFollowed(context.getAuthentication(), pageRequest);
 		return followers.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found followed topic " + result)));
 	}

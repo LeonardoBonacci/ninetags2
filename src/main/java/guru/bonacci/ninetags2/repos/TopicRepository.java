@@ -1,5 +1,6 @@
 package guru.bonacci.ninetags2.repos;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -17,6 +18,9 @@ public interface TopicRepository extends Neo4jRepository<Topic, Long> {
 
 
 	Optional<Topic> findByNameIgnoreCase(String name);
+
+
+	CompletableFuture<List<Topic>> findByNameContaining(String name);
 
 	
 	@Query(value = "MATCH (user:User {name:{name}})-[interest:INTERESTED_IN]->(t:Topic) " + 

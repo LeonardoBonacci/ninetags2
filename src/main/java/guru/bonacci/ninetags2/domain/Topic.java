@@ -7,6 +7,8 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +25,7 @@ public class Topic {
 
 	
 	@Id @GeneratedValue
+	@JsonIgnore
 	Long id;
 	
 	@Index(unique = true) 

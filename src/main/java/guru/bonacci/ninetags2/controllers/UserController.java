@@ -5,8 +5,6 @@ import static guru.bonacci.ninetags2.web.ExceptionHandler.handleFailure;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import javax.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.domain._User;
 import guru.bonacci.ninetags2.services.UserService;
 import io.swagger.annotations.Api;

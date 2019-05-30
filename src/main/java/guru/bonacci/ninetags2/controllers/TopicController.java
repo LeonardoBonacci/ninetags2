@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import guru.bonacci.ninetags2.domain.Topic;
+import guru.bonacci.ninetags2.services.TopicService;
 import guru.bonacci.ninetags2.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +27,17 @@ import lombok.RequiredArgsConstructor;
 public class TopicController {
 
 	private final UserService userService;
+	private final TopicService topicService;
+
+	
+	// curl -X GET -H 'Dear-User: Alpha' -i http://localhost:8080/topics/list/Culture
+	@ApiOperation(value = "List topics")
+    @GetMapping("/list/{name}")
+    public CompletableFuture<ResponseEntity<?>> list(@PathVariable("name") String name) {
+		return topicService.retrieveByName(name)
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
+    }
 
 	
 	@ApiOperation(value = "updates the topic-order")

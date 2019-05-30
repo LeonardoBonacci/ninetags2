@@ -6,6 +6,8 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +23,7 @@ import lombok.ToString;
 public class RelatesTo {
 
 	
+	@JsonIgnore
 	@Id @GeneratedValue
 	Long id;
 

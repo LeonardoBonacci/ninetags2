@@ -30,7 +30,7 @@ public class PagedTopicController {
 	@ApiOperation(value = "Topics that the user follows")
     @GetMapping("/followed")
     public CompletableFuture<ResponseEntity<?>> getFollowed(final Pageable pageRequest) {
-		return service.getFollowed(pageRequest)
+		return service.retrieveFollowed(pageRequest)
 				.thenApply(results -> new PageDto<Topic>(results.getContent()))
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
