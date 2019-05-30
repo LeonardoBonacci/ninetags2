@@ -1,8 +1,11 @@
-// OTHERS
-All the users that have shared a certain topic, count order by nr or times
-On all the topics that a certain user has shared, count order by nr or times
+// queries
+>All the users that have shared a certain topic, count order by nr or times
+>On all the topics that a certain user has shared, count order by nr or times
+>find (like) on topics
+> like service
+? forshare
 
+// others
 > (input) validation
-postsave event (relate topics) 
-> schema (share must have at least one topic?)
+
 

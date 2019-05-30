@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import guru.bonacci.ninetags2.domain.Likes;
 import guru.bonacci.ninetags2.domain.Share;
@@ -21,6 +22,7 @@ import guru.bonacci.ninetags2.repos.TopicRepository;
 import guru.bonacci.ninetags2.repos.UserRepository;
 import lombok.val;
 
+@EnableAsync
 @SpringBootApplication
 public class App {
 

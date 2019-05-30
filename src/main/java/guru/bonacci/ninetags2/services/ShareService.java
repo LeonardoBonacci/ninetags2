@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.neo4j.graphdb.security.AuthorizationViolationException;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.SharedWith;
 import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.domain._User;
+import guru.bonacci.ninetags2.events.CreationEvent;
 import guru.bonacci.ninetags2.repos.ShareRepository;
 import guru.bonacci.ninetags2.repos.SharedWithRepository;
 import guru.bonacci.ninetags2.repos.TopicRepository;
@@ -35,7 +37,7 @@ public class ShareService {
 	private final TopicRepository topicRepo;
 	private final UserRepository userRepo;
 	private final FakeSecurityContext context; 
-
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	@Transactional(readOnly = true)
 	public CompletableFuture<List<Share>> findByTitle(String title) {
@@ -50,7 +52,10 @@ public class ShareService {
 		
 		val savedTopics = topicRepo.saveAll(topics);
 		val share = shareBuilder.by(fromMe).about(stream(savedTopics.spliterator(), false).collect(toList())).build();
-		return completedFuture(shareRepo.save(share).getId());
+		val id = completedFuture(shareRepo.save(share).getId());
+
+		applicationEventPublisher.publishEvent(new CreationEvent<Share>(share, "private insert"));
+		return id;
 	}
 
 	
@@ -61,7 +66,10 @@ public class ShareService {
 		val savedTopics = topicRepo.saveAll(topics);
 		val share = shareBuilder.by(fromMe).about(stream(savedTopics.spliterator(), false).collect(toList())).build();
 		sharedWithRepo.save(SharedWith.builder().share(share).with(fromMe).build());
-		return completedFuture(shareRepo.save(share).getId());
+		val id = completedFuture(shareRepo.save(share).getId());
+
+		applicationEventPublisher.publishEvent(new CreationEvent<Share>(share, "private insert"));
+		return id;
 	}
 
 	
@@ -73,7 +81,10 @@ public class ShareService {
 		val savedTopics = topicRepo.saveAll(topics);
 		val share = shareBuilder.by(fromMe).about(stream(savedTopics.spliterator(), false).collect(toList())).build();
 		toUs.whenComplete((result, ex)  -> result.forEach(toMe -> sharedWithRepo.save(SharedWith.builder().share(share).with(toMe).build())));
-		return completedFuture(shareRepo.save(share).getId());
+
+		val id = completedFuture(shareRepo.save(share).getId());
+		applicationEventPublisher.publishEvent(new CreationEvent<Share>(share, "directed insert"));
+		return id;
 	}
 
 	

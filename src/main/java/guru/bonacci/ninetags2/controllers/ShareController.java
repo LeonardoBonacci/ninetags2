@@ -60,10 +60,10 @@ public class ShareController {
 	}
 
 	
-	// curl -X POST -H 'Dear-User: Alpha' -H 'Content-Type: application/json' -i
-	// http://localhost:8080/shares/private --data '{"title":"some
-	// title","url":"https://www.some-url.com/","topics":["On Cooking","Non existing
-	// topic"]}'
+	// curl -X POST -H 'Content-Type: application/json' -H 'Dear-User: Alpha' -i
+	// http://localhost:8080/shares/private --data
+	// '{"title":"anothertitle","url":"https://www.encyclo.nl/begrip/bla","topics":["Foo","antopic","btopic",
+	// "ctopic"]}'
 	@ApiOperation(value = "Saves private share. Adds non-existing topics.")
 	@PostMapping("/private")
 	public CompletableFuture<ResponseEntity<?>> insertPrivate(@RequestBody final ShareDto share) {
