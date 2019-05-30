@@ -3,9 +3,12 @@
 >On all the topics that a certain user has shared, count order by nr or times
 >find (like) on topics
 > like service
-? forshare
-
-// others
-> (input) validation
-
+> forshare
+> follow user post
+> follow topic post
+> prioritizeFollowed
+> prioritizeInterests
+> getHotShares
+> getHotTopics
+> getHotUsers
 

@@ -23,7 +23,7 @@ public class TopicController {
 
 	@ApiOperation(value = "updates the topic-order")
     @PutMapping
-    public CompletableFuture<ResponseEntity<?>> prioritizeTopics(final List<Topic> topics) {
+    public CompletableFuture<ResponseEntity<?>> prioritizeInterests(final List<Topic> topics) {
     	return null;
     }
 

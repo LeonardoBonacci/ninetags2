@@ -6,6 +6,8 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +52,7 @@ public class ShareController {
 	// topic"]}'
 	@ApiOperation(value = "Saves share connected to tags and user. Adds non-existing topics")
 	@PostMapping
-	public CompletableFuture<ResponseEntity<?>> insert(@RequestBody final ShareDto share) {
+	public CompletableFuture<ResponseEntity<?>> insert(@Valid @RequestBody final ShareDto share) {
 		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl());
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 
@@ -66,7 +68,7 @@ public class ShareController {
 	// "ctopic"]}'
 	@ApiOperation(value = "Saves private share. Adds non-existing topics.")
 	@PostMapping("/private")
-	public CompletableFuture<ResponseEntity<?>> insertPrivate(@RequestBody final ShareDto share) {
+	public CompletableFuture<ResponseEntity<?>> insertPrivate(@Valid @RequestBody final ShareDto share) {
 		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl());
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 
@@ -82,7 +84,7 @@ public class ShareController {
 	// Cooking","Non existing topic"],"users":["Beta","Gamma"]}'
 	@ApiOperation(value = "Directed share: send to users (can include oneself -> that will become a private share)")
 	@PostMapping("/directed")
-	public CompletableFuture<ResponseEntity<?>> insertDirected(@RequestBody final DirectedShareDto share) {
+	public CompletableFuture<ResponseEntity<?>> insertDirected(@Valid @RequestBody final DirectedShareDto share) {
 		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl());
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 

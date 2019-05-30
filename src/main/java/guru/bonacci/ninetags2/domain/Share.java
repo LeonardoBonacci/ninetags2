@@ -38,7 +38,7 @@ public class Share {
 	Long time;
 
     @ApiModelProperty(notes = "url pointing to the content")
-	String url;
+    String url;
 
 	@Relationship(type = "SHARED", direction=Relationship.INCOMING)
 	_User by;
