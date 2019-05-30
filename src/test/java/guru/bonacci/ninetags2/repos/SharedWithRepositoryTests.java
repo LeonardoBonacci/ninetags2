@@ -40,7 +40,10 @@ public class SharedWithRepositoryTests {
 	
 	@Before
 	public void setUp() {
+		sharedWithRepo.deleteAll();
+		shareRepo.deleteAll();
 		userRepo.deleteAll();
+		topicRepo.deleteAll();
 	
 		val alpha = _User.builder().name("Alpha").build();
 		userRepo.save(alpha);
@@ -112,11 +115,9 @@ public class SharedWithRepositoryTests {
 		String name = "Beta";
 		var results = shareRepo.getReceivedDirectedShares(name, PageRequest.of(0, 3)).get();
 		assertEquals(3, results.getNumberOfElements());
-		results.forEach(System.out::println);
 
 		name = "Gamma";
 		results = shareRepo.getReceivedDirectedShares(name, PageRequest.of(0, 3)).get();
 		assertEquals(3, results.getNumberOfElements());
-		results.forEach(System.out::println);
 	}
 }

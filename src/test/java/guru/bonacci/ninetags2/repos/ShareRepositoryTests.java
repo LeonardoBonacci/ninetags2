@@ -20,29 +20,29 @@ import guru.bonacci.ninetags2.domain.Share;
 public class ShareRepositoryTests {
 
 	@Autowired
-	private ShareRepository repo;
+	private ShareRepository shareRepo;
 
 
 	@Before
 	public void setUp() {
-		repo.deleteAll();
+		shareRepo.deleteAll();
 	
 		Share s1 = Share.builder().title("foo").build();
 		Share s2 = Share.builder().title("foobar").build();
 
-		repo.saveAll(asList(s1, s2));
+		shareRepo.saveAll(asList(s1, s2));
 	}
 
 	@Test
 	public void testFindByTitleContaining() throws InterruptedException, ExecutionException {
-		assertEquals(1, repo.findByTitleContaining("foobar").get().size());
-		assertEquals(2, repo.findByTitleContaining("foo").get().size());
+		assertEquals(1, shareRepo.findByTitleContaining("foobar").get().size());
+		assertEquals(2, shareRepo.findByTitleContaining("foo").get().size());
 	}
 	
 	@Test
 	public void testFindOneByTitle() throws InterruptedException, ExecutionException {
-		Share s = repo.save(Share.builder().title("bar").build());
-		assertNotNull(repo.findByTitle(s.getTitle()).get());
+		Share s = shareRepo.save(Share.builder().title("bar").build());
+		assertNotNull(shareRepo.findByTitle(s.getTitle()).get());
 	}
 
 }

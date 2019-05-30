@@ -89,7 +89,9 @@ public class ShareService {
 					if (!persisted.getBy().getName().equalsIgnoreCase(context.getAuthentication()))
 						throw new AuthorizationViolationException("You cannot change what is not yours..");
 
+					Long creation = persisted.getTime();
 					copyProperties(share, persisted);
+					persisted.setTime(creation);
 					shareRepo.save(persisted);
 				});
 		return shareRepo.findByTitle(share.getTitle()).whenComplete((result, ex) -> log.info("updated share " + result));

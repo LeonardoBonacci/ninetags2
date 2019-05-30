@@ -1,19 +1,8 @@
-// SPACE TIME SEARCH
-MATCH (share:Share)-[availableAt:AVAILABLE_AT]->(shareLoc:Location), (share)-[:AVAILABLE_DURING]->(sharedTime:Interval)
-WITH share, point({ longitude: 5.1859604, latitude: 52.037247 }) AS here, point({ longitude: shareLoc.longitude, latitude: shareLoc.latitude }) AS there
-WHERE toInteger(distance(here, there)/1000) < availableAt.radius
-AND (sharedTime.from IS NULL OR timestamp() > sharedTime.from) AND (sharedTime.until IS NULL OR timestamp() < sharedTime.until)
-RETURN share
-ORDER BY ID(share) DESC
-
 // OTHERS
 All the users that have shared a certain topic, count order by nr or times
 On all the topics that a certain user has shared, count order by nr or times
 
 > (input) validation
-> presave (or current timestamp) and postsave event (relate topics)
+> presave (or current timestamp) and postsave event (relate topics) / @CreatedDate auditing
+> schema (share must have at least one topic?)
 
-// USEFULL
-CALL dbms.procedures() YIELD name, signature
-WHERE name='dbms.listConfig'
-RETURN signature

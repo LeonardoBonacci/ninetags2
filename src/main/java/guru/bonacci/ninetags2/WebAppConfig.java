@@ -20,7 +20,7 @@ import guru.bonacci.ninetags2.web.UserInterceptor;
 
 @EnableWebMvc
 @Configuration
-@EnableNeo4jRepositories("guru.bonacci.ninetags2.repos")
+@EnableNeo4jRepositories({"guru.bonacci.ninetags2.repos", "guru.bonacci.ninetags2.experimental"})
 @EnableTransactionManagement
 public class WebAppConfig implements WebMvcConfigurer {
 
