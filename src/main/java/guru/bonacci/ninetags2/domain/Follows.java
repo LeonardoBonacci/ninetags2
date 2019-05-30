@@ -33,7 +33,7 @@ public class Follows {
 	Integer prio;
 
 	@StartNode 
-	_User  follower;
+	_User follower;
 	
 	@EndNode 
 	_User followed;
