@@ -3,6 +3,6 @@ All the users that have shared a certain topic, count order by nr or times
 On all the topics that a certain user has shared, count order by nr or times
 
 > (input) validation
-> presave (or current timestamp) and postsave event (relate topics) / @CreatedDate auditing
+postsave event (relate topics) 
 > schema (share must have at least one topic?)
 

@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,8 +18,6 @@ import guru.bonacci.ninetags2.web.UserInterceptor;
 
 @EnableWebMvc
 @Configuration
-@EnableNeo4jRepositories({"guru.bonacci.ninetags2.repos", "guru.bonacci.ninetags2.experimental"})
-@EnableTransactionManagement
 public class WebAppConfig implements WebMvcConfigurer {
 
 	@Autowired @Lazy

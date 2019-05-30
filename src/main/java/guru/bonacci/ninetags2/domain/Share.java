@@ -7,8 +7,8 @@ import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
+import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,7 +34,7 @@ public class Share {
 	String title;
 
     @JsonIgnore
-	@Property
+	@CreatedDate
 	Long time;
 
     @ApiModelProperty(notes = "url pointing to the content")
