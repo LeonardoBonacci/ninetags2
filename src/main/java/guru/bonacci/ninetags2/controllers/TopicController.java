@@ -42,7 +42,7 @@ public class TopicController {
 	// curl -X GET -H 'Dear-User: Alpha' -i http://localhost:8080/topics/list/Culture
 	@ApiOperation(value = "List topics")
     @GetMapping("/list/{name}")
-    public CompletableFuture<ResponseEntity<?>> list(@PathVariable("name") @NotBlank String name) {
+    public CompletableFuture<ResponseEntity<?>> list(@NotBlank @PathVariable("name") final String name) {
 		return topicService.retrieveByName(name)
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
@@ -64,7 +64,7 @@ public class TopicController {
 
 	@ApiOperation(value = "add topic to follow")
     @PostMapping("/follow/{topic}")
-    public CompletableFuture<ResponseEntity<?>> follow(@PathVariable("topic") @NotBlank String topic) {
+    public CompletableFuture<ResponseEntity<?>> follow(@NotBlank @PathVariable("topic") String topic) {
     	return userService.interests(topic)
     			.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 				.exceptionally(handleFailure);
@@ -72,7 +72,7 @@ public class TopicController {
 	
 	@ApiOperation(value = "remove topic to follow")
     @PostMapping("/unfollow/{topic}")
-    public CompletableFuture<ResponseEntity<?>> unfollow(@PathVariable("topic") @NotBlank String topic) {
+    public CompletableFuture<ResponseEntity<?>> unfollow(@NotBlank @PathVariable("topic") String topic) {
     	return userService.uninterests(topic)
     			.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 				.exceptionally(handleFailure);
