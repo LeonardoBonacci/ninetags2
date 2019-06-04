@@ -67,27 +67,9 @@ public class PagedShareController {
 		        .exceptionally(handleFailure);
     }
 
-	// curl -X GET -H 'Dear-User: Alpha' -i 'http://localhost:8080/shares/paged/userperspective?page=0''
-	@ApiOperation(value = "topic blabla")
-    @GetMapping("/userperspective")
-    public CompletableFuture<ResponseEntity<?>> getUserPerspective(final Pageable pageRequest) {
-		return service.retrieveUserPerspective(pageRequest)
-		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
-		        .exceptionally(handleFailure);
-    }
-
-	// curl -X GET -H 'Dear-User: Alpha' -i 'http://localhost:8080/shares/paged/topicperspective?page=0''
-	@ApiOperation(value = "user blabla")
-    @GetMapping("/topicperspective")
-    public CompletableFuture<ResponseEntity<?>> getTopicPerspective(final Pageable pageRequest) {
-		return service.retrieveTopicPerspective(pageRequest)
-		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
-		        .exceptionally(handleFailure);
-    }
-
 	@ApiOperation(value = "Most liked shares today")
     @GetMapping("/hot")
     public CompletableFuture<ResponseEntity<?>> getHotShares(final Pageable pageRequest) {
-		return null; 
+		return null; //TODO
     }
 }

@@ -39,6 +39,6 @@ public class PagedTopicController {
 	@ApiOperation(value = "Place to be.. most liked topics today")
     @GetMapping("/hot")
     public CompletableFuture<ResponseEntity<?>> getHotTopics(final Pageable page) {
-    	return null;
+    	return null; //TODO
     }
 }

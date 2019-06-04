@@ -97,7 +97,7 @@ public class ShareController {
 	@ApiOperation(value = "Forshares. Possible to add non-existing topics (also relates the topics to each other)")
 	@PostMapping("/for")
 	public CompletableFuture<ResponseEntity<?>> forShare(final Share share, final _User user) {
-		return null;
+		return null; //TODO
 	}
 
 	

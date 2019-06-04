@@ -48,20 +48,6 @@ public class TopicController {
 		        .exceptionally(handleFailure);
     }
 
-	
-	@ApiOperation(value = "updates the topic/interests-order")
-    @PutMapping("/prio")
-    public CompletableFuture<ResponseEntity<?>> prioritizeInterests(@Validated(CheckOrder.class) @RequestBody final TopicDtoList topics) {
-		val interests = topics.stream()
-						.map(t -> Interests.builder().followed(new Topic(t.getTopic())).prio(t.getPrio()).build())
-						.collect(toSet());
-		
-		return topicService.prioritize(interests)
-		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
-		        .exceptionally(handleFailure);
-    }
-
-
 	@ApiOperation(value = "add topic to follow")
     @PostMapping("/follow/{topic}")
     public CompletableFuture<ResponseEntity<?>> follow(@NotBlank @PathVariable("topic") String topic) {
@@ -76,5 +62,17 @@ public class TopicController {
     	return userService.uninterests(topic)
     			.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 				.exceptionally(handleFailure);
+    }
+	
+	@ApiOperation(value = "updates the topic/interests-order")
+    @PutMapping("/prio")
+    public CompletableFuture<ResponseEntity<?>> prioritizeInterests(@Validated(CheckOrder.class) @RequestBody final TopicDtoList topics) {
+		val interests = topics.stream()
+						.map(t -> Interests.builder().followed(new Topic(t.getTopic())).prio(t.getPrio()).build())
+						.collect(toSet());
+		
+		return topicService.prioritize(interests)
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
     }
 }
