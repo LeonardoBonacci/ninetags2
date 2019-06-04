@@ -49,7 +49,12 @@ public class _User {
 	@Builder.Default 
 	Set<Interests> interests = newHashSet();
 	
+	
+	public _User(String username) {
+		this.name = username;
+	}
 
+	
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,6 +73,13 @@ public class _User {
         return 31;
     }
     
+
+    public void addFollows(@NonNull Follows... followUs) {
+		val mapByUserName = follows.stream().collect(toMap(f -> f.getFollowed().getName(), identity()));
+		stream(followUs).forEach(f -> mapByUserName.put(f.getFollowed().getName(), f));
+		follows = mapByUserName.values().stream().collect(toSet());
+	}	
+
 	public void addFollows(@NonNull _User... followUs) {
 		for (_User followMe : followUs)
 			addFollows(followMe);

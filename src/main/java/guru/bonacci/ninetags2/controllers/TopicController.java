@@ -49,7 +49,7 @@ public class TopicController {
     }
 
 	
-	@ApiOperation(value = "updates the topic-order")
+	@ApiOperation(value = "updates the topic/interests-order")
     @PutMapping("/prio")
     public CompletableFuture<ResponseEntity<?>> prioritizeInterests(@Validated(CheckOrder.class) @RequestBody final TopicDtoList topics) {
 		val interests = topics.stream()

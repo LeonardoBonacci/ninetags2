@@ -50,4 +50,5 @@ public class TopicService {
 		});;
 		
 		return CompletableFuture.completedFuture(null);
-	}}
+	}
+}
