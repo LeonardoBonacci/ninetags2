@@ -12,11 +12,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({FIELD})
 @Retention(RUNTIME)
-@Constraint(validatedBy = TopicPrioValidator.class)
+@Constraint(validatedBy = PrioValidator.class)
 @Documented
-public @interface TopicPrio {
+public @interface Prio {
 
-    String message() default "Topics.prio must be an ascending (order is irrelevant) non-interupted sequence.";
+    String message() default "prio must be an ascending (order is irrelevant) non-interupted sequence.";
 
     Class<?>[] groups() default {};
 

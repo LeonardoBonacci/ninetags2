@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import guru.bonacci.ninetags2.validation.FirstChecks;
 import guru.bonacci.ninetags2.validation.LastChecks;
-import guru.bonacci.ninetags2.validation.UserPrio;
+import guru.bonacci.ninetags2.validation.Prio;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +25,6 @@ public class UserDtoList {
 	@NotEmpty(message = "No users to order", groups = FirstChecks.class)
 	@UniqueElements(message = "Duplicate found!", groups = FirstChecks.class)
     @Delegate
-    @UserPrio(groups = LastChecks.class)
+    @Prio(groups = LastChecks.class)
 	private List<@Valid UserDto> users = new ArrayList<>();
 }
