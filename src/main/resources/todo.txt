@@ -1,9 +1,8 @@
-> like service
 > query All the users that have shared a certain topic, count order by nr or times
 > query On all the topics that a certain user has shared, count order by nr or times
-> getHotTopics
-> getHotUsers
+
 > forshare
+> like service
 
 > load script
 > full text search

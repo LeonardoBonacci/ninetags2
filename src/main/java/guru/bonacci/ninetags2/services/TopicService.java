@@ -51,4 +51,10 @@ public class TopicService {
 		
 		return CompletableFuture.completedFuture(null);
 	}
+	
+	@Transactional(readOnly = true)
+	public CompletableFuture<Page<Topic>> retrieveHotTopics(final Pageable pageRequest) {
+		val hotties = topicRepo.getMostLikedTopicsToday(pageRequest);
+		return hotties.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found hot topic " + result)));
+	}
 }

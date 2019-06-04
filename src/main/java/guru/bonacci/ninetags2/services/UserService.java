@@ -113,4 +113,10 @@ public class UserService {
 		
 		return CompletableFuture.completedFuture(null);
 	}
+	
+	@Transactional(readOnly = true)
+	public CompletableFuture<Page<_User>> retrieveHotUsers(final Pageable pageRequest) {
+		val hotties = userRepo.getMostLikedUsersToday(pageRequest);
+		return hotties.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found hot user " + result)));
+	}
 }

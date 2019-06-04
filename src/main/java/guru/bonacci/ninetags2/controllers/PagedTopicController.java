@@ -38,7 +38,10 @@ public class PagedTopicController {
 
 	@ApiOperation(value = "Place to be.. most liked topics today")
     @GetMapping("/hot")
-    public CompletableFuture<ResponseEntity<?>> getHotTopics(final Pageable page) {
-    	return null; //TODO
+    public CompletableFuture<ResponseEntity<?>> getHotTopics(final Pageable pageRequest) {
+		return service.retrieveHotTopics(pageRequest)
+				.thenApply(results -> new PageDto<Topic>(results.getContent()))
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
     }
 }

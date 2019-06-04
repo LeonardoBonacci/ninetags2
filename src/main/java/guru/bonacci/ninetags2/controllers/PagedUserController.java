@@ -37,7 +37,10 @@ public class PagedUserController {
 
 	@ApiOperation(value = "Hall of fame.. most liked users today")
     @GetMapping("/hot")
-    public CompletableFuture<ResponseEntity<?>> getHotUsers(final Pageable pageable) {
-    	return null; //TODO
+    public CompletableFuture<ResponseEntity<?>> getHotUsers(final Pageable pageRequest) {
+		return service.retrieveHotUsers(pageRequest)
+				.thenApply(results -> new PageDto<_User>(results.getContent()))
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
     }
 }

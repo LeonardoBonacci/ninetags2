@@ -30,4 +30,14 @@ public interface TopicRepository extends Neo4jRepository<Topic, Long> {
 			countQuery = "RETURN COUNT(0) " )
 	CompletableFuture<Page<Topic>> getFollowed(@Param("name") String name, Pageable pageRequest);
 
+	
+	@Query(value = "CALL ga.timetree.now({}) " + 
+			"YIELD instant as today " +
+			"MATCH ()-[likes:LIKES]->(share:Share)-[:AT_TIME]->(today) " + 
+			"MATCH (topic:Topic)<-[IS_ABOUT]-(share) " +
+			"WITH topic, COUNT(likes) AS nrLikes " +
+			"RETURN topic " +
+			"ORDER BY nrLikes DESC ",
+		   countQuery = "RETURN COUNT(0) " )
+	CompletableFuture<Page<Topic>> getMostLikedTopicsToday(Pageable pageRequest);
 }

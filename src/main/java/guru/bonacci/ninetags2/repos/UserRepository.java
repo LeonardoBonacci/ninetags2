@@ -35,5 +35,14 @@ public interface UserRepository extends Neo4jRepository<_User, Long> {
 			countQuery = "RETURN COUNT(0) " )
 	CompletableFuture<Page<_User>> getFollowed(@Param("name") String name, Pageable pageRequest);
 
-	
+
+	@Query(value = "CALL ga.timetree.now({}) " + 
+			"YIELD instant as today " +
+			"MATCH ()-[likes:LIKES]->(share:Share)-[:AT_TIME]->(today) " + 
+			"MATCH (sharer:User)-[shared:SHARED]->(share) " + 
+			"WITH sharer, COUNT(likes) AS nrLikes " +
+			"RETURN sharer " +
+			"ORDER BY nrLikes DESC ",
+		   countQuery = "RETURN COUNT(0) " )
+	CompletableFuture<Page<_User>> getMostLikedUsersToday(Pageable pageRequest);
 }
