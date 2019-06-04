@@ -91,4 +91,10 @@ public class PagedShareService {
 		return directed.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found sent directed share " + result)));
 	}
 
+
+	@Transactional(readOnly = true)
+	public CompletableFuture<Page<Share>> retrieveHotShares(final Pageable pageRequest) {
+		val hotties = likesRepo.getMostLikedSharesToday(pageRequest);
+		return hotties.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found hot share " + result)));
+	}
 }

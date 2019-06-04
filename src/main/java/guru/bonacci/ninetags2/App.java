@@ -106,11 +106,20 @@ public class App {
 			val swliterature = SharedWith.builder().share(sliterature).with(beta).build();
 			sharedWithRepo.saveAll(asList(swculture, swcooking, swhobbies, swliterature));
 			
-			val artl1 = Likes.builder().user(alpha).share(sart).build();
-			val artl2 = Likes.builder().user(gamma).share(sart).build();
-			val dancel = Likes.builder().user(beta).share(sdance).build();
-			val gamel = Likes.builder().user(beta).share(ssports).build();
-			likesRepo.saveAll(asList(artl1, artl2, dancel, gamel));
+			val lartl = Likes.builder().user(alpha).share(sart).build();
+			val lart2 = Likes.builder().user(gamma).share(sart).build();
+			val lart3 = Likes.builder().user(zeta).share(sart).build();
+			val lart4 = Likes.builder().user(lambda).share(sart).build();
+			val ldance = Likes.builder().user(beta).share(sdance).build();
+			val ldance2 = Likes.builder().user(alpha).share(sdance).build();
+			val ldance3 = Likes.builder().user(delta).share(sdance).build();
+			val lgame = Likes.builder().user(beta).share(ssports).build();
+			val lgame2 = Likes.builder().user(mu).share(ssports).build();
+			val lgame3 = Likes.builder().user(nu).share(ssports).build();
+			val lpoetry = Likes.builder().user(nu).share(spoetry).build();
+			val lpoetry2 = Likes.builder().user(mu).share(spoetry).build();
+			val llit = Likes.builder().user(mu).share(sliterature).build();
+			likesRepo.saveAll(asList(lartl,lart2,lart3,lart4,ldance,ldance2,ldance3,lgame,lgame2,lgame3,lpoetry,lpoetry2,llit));
 		};
 	}
 }

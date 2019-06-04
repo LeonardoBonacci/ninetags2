@@ -70,6 +70,9 @@ public class PagedShareController {
 	@ApiOperation(value = "Most liked shares today")
     @GetMapping("/hot")
     public CompletableFuture<ResponseEntity<?>> getHotShares(final Pageable pageRequest) {
-		return null; //TODO
+		return service.retrieveHotShares(pageRequest)
+				.thenApply(results -> new PageDto<Share>(results.getContent()))
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
     }
 }
