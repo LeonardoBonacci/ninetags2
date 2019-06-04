@@ -96,9 +96,10 @@ public class App {
 			val spoetry = Share.builder().title("On Poetry").by(alpha).time(System.currentTimeMillis()).build();
 
 			val sart = Share.builder().title("On Art").by(beta).about(Arrays.asList(art, game)).time(System.currentTimeMillis()).build();
+			val sart2 = Share.builder().title("On Art 2").by(beta).about(Arrays.asList(art, game)).time(System.currentTimeMillis()).build();
 			val sdance = Share.builder().title("On Dance").by(gamma).about(Arrays.asList(art, game)).time(System.currentTimeMillis()).build();
 			val ssports = Share.builder().title("On Sports").by(zeta).about(Arrays.asList(game)).time(System.currentTimeMillis()).build();
-			shareRepo.saveAll(asList(sculture, scooking, shobbies, sliterature, sart, sentertainment, sfiction, sgame, spoetry, ssports, sdance));
+			shareRepo.saveAll(asList(sculture, scooking, shobbies, sliterature, sart, sart2, sentertainment, sfiction, sgame, spoetry, ssports, sdance));
 
 			val swculture = SharedWith.builder().share(sculture).with(alpha).build();
 			val swcooking = SharedWith.builder().share(scooking).with(alpha).build();

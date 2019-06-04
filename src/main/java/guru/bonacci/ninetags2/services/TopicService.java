@@ -41,6 +41,14 @@ public class TopicService {
 		val followers = topicRepo.getFollowed(context.getAuthentication(), pageRequest);
 		return followers.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found followed topic " + result)));
 	}
+
+	
+	@Transactional(readOnly = true)
+	public CompletableFuture<Page<Topic>> retrieveMostSharingByUser(final String username, final Pageable pageRequest) {
+		val sharedTopics = topicRepo.getMostSharingOnUser(username, pageRequest);
+		return sharedTopics.whenComplete((results, ex) -> results.forEach(result -> log.info("found active topic " + result)));
+	}
+
 	
 	@Transactional
 	public CompletableFuture<Void> prioritize(@NonNull final Set<Interests> interests) {

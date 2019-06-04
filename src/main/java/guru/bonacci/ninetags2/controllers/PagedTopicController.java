@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +41,15 @@ public class PagedTopicController {
     @GetMapping("/hot")
     public CompletableFuture<ResponseEntity<?>> getHotTopics(final Pageable pageRequest) {
 		return service.retrieveHotTopics(pageRequest)
+				.thenApply(results -> new PageDto<Topic>(results.getContent()))
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
+    }
+	
+	@ApiOperation(value = "Popular topics for this user...")
+	@GetMapping("/active/{username}")
+	public CompletableFuture<ResponseEntity<?>> findByTitle(@PathVariable("username") final String username, final Pageable pageRequest) {
+		return service.retrieveMostSharingByUser(username, pageRequest)
 				.thenApply(results -> new PageDto<Topic>(results.getContent()))
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);

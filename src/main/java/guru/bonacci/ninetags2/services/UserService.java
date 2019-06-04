@@ -57,6 +57,13 @@ public class UserService {
 	}
 
 	
+	@Transactional(readOnly = true)
+	public CompletableFuture<Page<_User>> retrieveMostSharingOnTopic(final String topic, final Pageable pageRequest) {
+		val sharedUsers = userRepo.getMostSharingOnTopic(topic, pageRequest);
+		return sharedUsers.whenComplete((results, ex) -> results.forEach(result -> log.info("found active sharer " + result)));
+	}
+
+	
 	@Transactional
 	public CompletableFuture<Void> follows(final String followMe) {
 		_User follower = context.getTheUser();

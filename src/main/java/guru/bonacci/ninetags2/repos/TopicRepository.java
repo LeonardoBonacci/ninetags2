@@ -31,6 +31,14 @@ public interface TopicRepository extends Neo4jRepository<Topic, Long> {
 	CompletableFuture<Page<Topic>> getFollowed(@Param("name") String name, Pageable pageRequest);
 
 	
+	@Query(value = "MATCH (:User {name:{name}})-[:SHARED]->(:Share)-[:IS_ABOUT]->(topic:Topic) " + 
+					"WITH topic, COUNT(topic) AS nrSharings " +
+					"RETURN topic " + 
+					"ORDER BY nrSharings DESC ",
+			countQuery = "RETURN COUNT(0) " )
+	CompletableFuture<Page<Topic>> getMostSharingOnUser(@Param("name") String name, Pageable pageRequest);
+
+	
 	@Query(value = "CALL ga.timetree.now({}) " + 
 			"YIELD instant as today " +
 			"MATCH ()-[likes:LIKES]->(share:Share)-[:AT_TIME]->(today) " + 
