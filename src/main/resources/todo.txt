@@ -1,5 +1,4 @@
 > forshare
-> like service
 
 > load script
 > full text search

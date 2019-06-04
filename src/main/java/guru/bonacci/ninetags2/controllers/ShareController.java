@@ -94,6 +94,15 @@ public class ShareController {
 	}
 
 	
+	@ApiOperation(value = "I Like. Just that.")
+	@PostMapping("/like/{shareId}")
+	public CompletableFuture<ResponseEntity<?>> like(@PathVariable("shareId") final Long shareId) {
+		return service.like(shareId)
+				.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+				.exceptionally(handleFailure);
+	}
+
+	
 	@ApiOperation(value = "Forshares. Possible to add non-existing topics (also relates the topics to each other)")
 	@PostMapping("/for")
 	public CompletableFuture<ResponseEntity<?>> forShare(final Share share, final _User user) {
@@ -105,7 +114,7 @@ public class ShareController {
 	// http://localhost:8080/shares/200 --data
 	// '{"title":"anortitle","url":"https://www.encyclo.nl/begrip/bla","topics":["Foo"]}'
 	@ApiOperation(value = "Update share")
-	@PutMapping("{id}")
+	@PutMapping("/{id}")
 	public CompletableFuture<ResponseEntity<?>> update(@PathVariable("id") final Long id, @RequestBody final ShareDto share) {
 		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl()).id(id);
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());

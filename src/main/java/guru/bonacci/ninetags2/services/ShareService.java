@@ -13,11 +13,13 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import guru.bonacci.ninetags2.domain.Likes;
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.SharedWith;
 import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.domain._User;
 import guru.bonacci.ninetags2.events.CreationEvent;
+import guru.bonacci.ninetags2.repos.LikesRepository;
 import guru.bonacci.ninetags2.repos.ShareRepository;
 import guru.bonacci.ninetags2.repos.SharedWithRepository;
 import guru.bonacci.ninetags2.repos.TopicRepository;
@@ -36,6 +38,8 @@ public class ShareService {
 	private final ShareRepository shareRepo;
 	private final TopicRepository topicRepo;
 	private final UserRepository userRepo;
+	private final LikesRepository likesRepo;
+
 	private final FakeSecurityContext context; 
 	private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -118,6 +122,21 @@ public class ShareService {
 			});
 
 		shareRepo.deleteById(id);
+		return completedFuture(null);
+	}
+	
+
+	@Transactional
+	public CompletableFuture<Long> like(final Long shareId) {
+		_User user = context.getTheUser();
+
+		shareRepo.findById(shareId).ifPresent(share -> {
+			if (share.getBy().getName().equalsIgnoreCase(context.getAuthentication()))
+				throw new AuthorizationViolationException("You cannot like yourself..");
+
+			likesRepo.save(Likes.builder().share(share).user(user).build()); // double liking is just an update
+		});
+		
 		return completedFuture(null);
 	}
 }

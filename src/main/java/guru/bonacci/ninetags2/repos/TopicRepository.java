@@ -42,7 +42,7 @@ public interface TopicRepository extends Neo4jRepository<Topic, Long> {
 	@Query(value = "CALL ga.timetree.now({}) " + 
 			"YIELD instant as today " +
 			"MATCH ()-[likes:LIKES]->(share:Share)-[:AT_TIME]->(today) " + 
-			"MATCH (topic:Topic)<-[IS_ABOUT]-(share) " +
+			"MATCH (topic:Topic)<-[:IS_ABOUT]-(share) " +
 			"WITH topic, COUNT(likes) AS nrLikes " +
 			"RETURN topic " +
 			"ORDER BY nrLikes DESC ",
