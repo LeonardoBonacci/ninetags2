@@ -32,4 +32,23 @@ public class RelatesTo {
 	
 	@EndNode 
 	Topic to;
+	
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+ 
+        if (!(o instanceof RelatesTo))
+            return false;
+ 
+        RelatesTo other = (RelatesTo) o;
+ 
+        return id != null &&
+               id.equals(other.getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

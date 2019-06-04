@@ -4,6 +4,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import org.neo4j.graphdb.security.AuthorizationViolationException;
@@ -12,10 +13,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import guru.bonacci.ninetags2.domain.Follows;
 import guru.bonacci.ninetags2.domain._User;
 import guru.bonacci.ninetags2.repos.TopicRepository;
 import guru.bonacci.ninetags2.repos.UserRepository;
 import guru.bonacci.ninetags2.web.FakeSecurityContext;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -83,7 +86,7 @@ public class UserService {
 		_User follower = context.getTheUser();
 
 		topicRepo.findByNameIgnoreCase(followMe).ifPresent(followed -> {
-			follower.addInterests(followed);
+			follower.addTopics(followed);
 			userRepo.save(follower);
 		});	
 		return completedFuture(null);
@@ -95,9 +98,19 @@ public class UserService {
 		_User follower = context.getTheUser();
 
 		topicRepo.findByNameIgnoreCase(doNotfollowMe).ifPresent(unfollowed -> {
-			follower.deleteInterests(unfollowed);
+			follower.deleteTopics(unfollowed);
 			userRepo.save(follower);
 		});	
 		return completedFuture(null);
+	}
+	
+	@Transactional
+	public CompletableFuture<Void> prioritize(@NonNull final Set<Follows> follows) {
+		userRepo.findByNameIgnoreCase(context.getAuthentication()).ifPresent(user -> {
+			user.addFollows(follows.stream().map(f -> { f.setFollower(user); return f; }).toArray(Follows[]::new));
+			userRepo.save(user);
+		});;
+		
+		return CompletableFuture.completedFuture(null);
 	}
 }
