@@ -3,9 +3,11 @@ package guru.bonacci.ninetags2.controllers;
 import static guru.bonacci.ninetags2.web.ExceptionHandler.handleFailure;
 import static java.util.stream.Collectors.toList;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import javax.annotation.Nullable;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.Topic;
-import guru.bonacci.ninetags2.domain._User;
 import guru.bonacci.ninetags2.services.ShareService;
 import guru.bonacci.ninetags2.webdomain.DirectedShareDto;
+import guru.bonacci.ninetags2.webdomain.ForShareDto;
 import guru.bonacci.ninetags2.webdomain.ShareDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -103,10 +105,14 @@ public class ShareController {
 	}
 
 	
-	@ApiOperation(value = "Forshares. Possible to add non-existing topics (also relates the topics to each other)")
-	@PostMapping("/for")
-	public CompletableFuture<ResponseEntity<?>> forShare(final Share share, final _User user) {
-		return null; //TODO
+	@ApiOperation(value = "retweet becomes forshare")
+	@PostMapping("/for/{shareId}")
+	public CompletableFuture<ResponseEntity<?>> forShare(@PathVariable("shareId") final Long shareId, @Valid @Nullable @RequestBody final ForShareDto forShare) {
+		List<Topic> newTopics = forShare != null ? forShare.getNewtopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList()) : Collections.emptyList();
+
+		return service.forShare(shareId, newTopics)
+				.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+				.exceptionally(handleFailure);
 	}
 
 	
@@ -115,7 +121,7 @@ public class ShareController {
 	// '{"title":"anortitle","url":"https://www.encyclo.nl/begrip/bla","topics":["Foo"]}'
 	@ApiOperation(value = "Update share")
 	@PutMapping("/{id}")
-	public CompletableFuture<ResponseEntity<?>> update(@PathVariable("id") final Long id, @RequestBody final ShareDto share) {
+	public CompletableFuture<ResponseEntity<?>> update(@PathVariable("id") final Long id, @Valid @RequestBody final ShareDto share) {
 		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl()).id(id);
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 

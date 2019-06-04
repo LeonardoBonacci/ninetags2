@@ -1,8 +1,8 @@
 package guru.bonacci.ninetags2.repos;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
+import static com.google.common.collect.Sets.newHashSet;
 
 import java.util.concurrent.ExecutionException;
 
@@ -55,12 +55,12 @@ public class SharedWithRepositoryTests {
 		topicRepo.saveAll(asList(cooking, story));
 		
 		val sculture = Share.builder().title("On Culture").by(alpha).build();
-		val scooking = Share.builder().title("On Cooking").by(alpha).about(singletonList(cooking)).build();
+		val scooking = Share.builder().title("On Cooking").by(alpha).about(newHashSet(cooking)).build();
 		val shobbies = Share.builder().title("On Hobbies").by(alpha).build();
 		val sliterature = Share.builder().title("On Literature").by(alpha).build();
 		val sart = Share.builder().title("On Art").by(alpha).build();
 		val sentertainment = Share.builder().title("On Entertainment").by(alpha).build();
-		val sfiction = Share.builder().title("On Fiction").by(alpha).about(singletonList(story)).build();
+		val sfiction = Share.builder().title("On Fiction").by(alpha).about(newHashSet(story)).build();
 		val sgame = Share.builder().title("On Game").by(alpha).build();
 		val spoetry = Share.builder().title("On Poetry").by(alpha).build();
 		val ssports = Share.builder().title("On Sports").by(alpha).build();

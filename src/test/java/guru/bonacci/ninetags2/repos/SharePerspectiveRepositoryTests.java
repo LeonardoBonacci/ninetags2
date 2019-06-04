@@ -1,7 +1,7 @@
 package guru.bonacci.ninetags2.repos;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -66,17 +66,17 @@ public class SharePerspectiveRepositoryTests {
 		gamma.addTopics(cooking, story, play);
 		userRepo.saveAll(asList(alpha, beta, gamma, notFollowed));
 		
-		val s1 = Share.builder().title("On Cooking").by(alpha).about(singletonList(cooking)).build();
-		val s2 = Share.builder().title("On Porridge").by(alpha).about(singletonList(cooking)).build();
-		val s3 = Share.builder().title("Talking about cooking").by(alpha).about(asList(cooking, story)).build();
-		val s7 = Share.builder().title("Foo").by(alpha).about(singletonList(notInteresting)).build();
+		val s1 = Share.builder().title("On Cooking").by(alpha).about(newHashSet(cooking)).build();
+		val s2 = Share.builder().title("On Porridge").by(alpha).about(newHashSet(cooking)).build();
+		val s3 = Share.builder().title("Talking about cooking").by(alpha).about(newHashSet(cooking, story)).build();
+		val s7 = Share.builder().title("Foo").by(alpha).about(newHashSet(notInteresting)).build();
 
-		val s4 = Share.builder().title("On Art").by(beta).about(singletonList(story)).build();
-		val s5 = Share.builder().title("On Entertainment").by(beta).about(asList(story, play)).build();
+		val s4 = Share.builder().title("On Art").by(beta).about(newHashSet(story)).build();
+		val s5 = Share.builder().title("On Entertainment").by(beta).about(newHashSet(story, play)).build();
 		
-		val s6 = Share.builder().title("On Nothingness").by(gamma).about(singletonList(notInteresting)).build();
+		val s6 = Share.builder().title("On Nothingness").by(gamma).about(newHashSet(notInteresting)).build();
 
-		val s8 = Share.builder().title("On All").by(notFollowed).about(asList(cooking, story, play)).build();
+		val s8 = Share.builder().title("On All").by(notFollowed).about(newHashSet(cooking, story, play)).build();
 
 		shareRepo.saveAll(asList(s1, s2, s3, s4, s5, s6, s7, s8));
 	}

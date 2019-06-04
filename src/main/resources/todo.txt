@@ -1,4 +1,2 @@
-> forshare
-
 > load script
 > full text search

@@ -2,6 +2,7 @@ package guru.bonacci.ninetags2.experimental;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static com.google.common.collect.Sets.newHashSet;
 
 import java.util.concurrent.ExecutionException;
 
@@ -69,12 +70,12 @@ public class SpaceTimeShareRepositoryTests {
 		userRepo.saveAll(asList(alpha, beta, gamma));
 
 		
-		val s1 = Share.builder().title("On Culture").by(alpha).about(asList(culture)).time(System.currentTimeMillis()).build();
-		val s2 = Share.builder().title("On Logic").by(alpha).about(asList(logic)).time(System.currentTimeMillis()).build();
-		val s3 = Share.builder().title("bbc").by(beta).about(asList(culture)).time(System.currentTimeMillis()).build();
-		val s4 = Share.builder().title("cult syn").by(beta).about(asList(culture)).time(System.currentTimeMillis()).build();
-		val s5 = Share.builder().title("beach cul").by(gamma).about(asList(culture)).time(System.currentTimeMillis()).build();
-		val s6 = Share.builder().title("cul europe").by(gamma).about(asList(culture)).time(System.currentTimeMillis()).build();
+		val s1 = Share.builder().title("On Culture").by(alpha).about(newHashSet(culture)).time(System.currentTimeMillis()).build();
+		val s2 = Share.builder().title("On Logic").by(alpha).about(newHashSet(logic)).time(System.currentTimeMillis()).build();
+		val s3 = Share.builder().title("bbc").by(beta).about(newHashSet(culture)).time(System.currentTimeMillis()).build();
+		val s4 = Share.builder().title("cult syn").by(beta).about(newHashSet(culture)).time(System.currentTimeMillis()).build();
+		val s5 = Share.builder().title("beach cul").by(gamma).about(newHashSet(culture)).time(System.currentTimeMillis()).build();
+		val s6 = Share.builder().title("cul europe").by(gamma).about(newHashSet(culture)).time(System.currentTimeMillis()).build();
 		shareRepo.saveAll(asList(s1, s2, s3, s4, s5, s6));
 
 		Location adam = Location.builder().name("Amsterdam").longitude(4.8936041f).latitude(52.3727598f).build();

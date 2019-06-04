@@ -1,7 +1,8 @@
 package guru.bonacci.ninetags2.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.google.common.collect.Sets.newHashSet;
+
+import java.util.Set;
 
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
@@ -30,7 +31,7 @@ public class Share {
 	Long id;
 	
     @ApiModelProperty(notes = "whatever it is named by the user")
-	@Index(unique=true) 
+	@Index(unique = true) 
 	String title;
 
     @JsonIgnore
@@ -45,7 +46,7 @@ public class Share {
 	
 	@Relationship(type = "IS_ABOUT")
 	@Builder.Default 
-	List<Topic> about = new ArrayList<>();
+	Set<Topic> about = newHashSet();
 	
 	
 	@Override

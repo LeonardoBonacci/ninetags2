@@ -3,6 +3,7 @@ package guru.bonacci.ninetags2;
 import static java.util.Arrays.asList;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -86,19 +87,19 @@ public class App {
 			beta.addFollows(alpha);
 			userRepo.saveAll(asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
 
-			val sculture = Share.builder().title("Culture").by(alpha).time(System.currentTimeMillis()).build();
-			val scooking = Share.builder().title("Cooking").by(alpha).time(System.currentTimeMillis()).build();
-			val shobbies = Share.builder().title("Hobbies").by(alpha).time(System.currentTimeMillis()).build();
-			val sliterature = Share.builder().title("Literature").by(alpha).time(System.currentTimeMillis()).build();
-			val sentertainment = Share.builder().title("On Entertainment").by(alpha).time(System.currentTimeMillis()).build();
-			val sfiction = Share.builder().title("On Fiction").by(alpha).time(System.currentTimeMillis()).build();
-			val sgame = Share.builder().title("On Game").by(alpha).time(System.currentTimeMillis()).build();
-			val spoetry = Share.builder().title("On Poetry").by(alpha).time(System.currentTimeMillis()).build();
+			val sculture = Share.builder().title("Culture").by(alpha).build();
+			val scooking = Share.builder().title("Cooking").by(alpha).build();
+			val shobbies = Share.builder().title("Hobbies").by(alpha).build();
+			val sliterature = Share.builder().title("Literature").by(alpha).build();
+			val sentertainment = Share.builder().title("On Entertainment").by(alpha).build();
+			val sfiction = Share.builder().title("On Fiction").by(alpha).build();
+			val sgame = Share.builder().title("On Game").by(alpha).build();
+			val spoetry = Share.builder().title("On Poetry").by(alpha).build();
 
-			val sart = Share.builder().title("On Art").by(beta).about(Arrays.asList(art, game)).time(System.currentTimeMillis()).build();
-			val sart2 = Share.builder().title("On Art 2").by(beta).about(Arrays.asList(art, game)).time(System.currentTimeMillis()).build();
-			val sdance = Share.builder().title("On Dance").by(gamma).about(Arrays.asList(art, game)).time(System.currentTimeMillis()).build();
-			val ssports = Share.builder().title("On Sports").by(zeta).about(Arrays.asList(game)).time(System.currentTimeMillis()).build();
+			val sart = Share.builder().title("On Art").by(beta).about(new HashSet<>(Arrays.asList(art, game))).build();
+			val sart2 = Share.builder().title("On Art 2").by(beta).about(new HashSet<>(Arrays.asList(art, game))).build();
+			val sdance = Share.builder().title("On Dance").by(gamma).about(new HashSet<>(Arrays.asList(art, game))).build();
+			val ssports = Share.builder().title("On Sports").by(zeta).about(new HashSet<>(Arrays.asList(game))).build();
 			shareRepo.saveAll(asList(sculture, scooking, shobbies, sliterature, sart, sart2, sentertainment, sfiction, sgame, spoetry, ssports, sdance));
 
 			val swculture = SharedWith.builder().share(sculture).with(alpha).build();
