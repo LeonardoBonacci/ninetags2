@@ -1,11 +1,10 @@
 package guru.bonacci.ninetags2.webdomain;
 
-import javax.validation.GroupSequence;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
-import guru.bonacci.ninetags2.validation.TopicChecks;
+import guru.bonacci.ninetags2.validation.FirstChecks;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,12 +12,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@GroupSequence({ TopicChecks.class, TopicDto.class })
 public class TopicDto {
 
-	@NotNull @Min(value = 1, groups = TopicChecks.class)
+	@NotNull(
+			message = "Where is the prio?",
+			groups = FirstChecks.class) 
+	@Positive
 	private Integer prio;
 	
-	@NotBlank(groups = TopicChecks.class)
+    @NotBlank(
+            message = "No topic no...",
+            groups = FirstChecks.class
+    )
 	private String topic;
 }

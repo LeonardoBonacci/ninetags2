@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toSet;
 
 import java.util.concurrent.CompletableFuture;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,7 @@ import guru.bonacci.ninetags2.domain.Interests;
 import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.services.TopicService;
 import guru.bonacci.ninetags2.services.UserService;
+import guru.bonacci.ninetags2.validation.CheckOrder;
 import guru.bonacci.ninetags2.webdomain.TopicDtoList;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,8 +50,8 @@ public class TopicController {
 
 	
 	@ApiOperation(value = "updates the topic-order")
-    @PutMapping //TODO execute TopicDto validation before  TopicDtoList validation
-    public CompletableFuture<ResponseEntity<?>> prioritizeInterests(@Valid @RequestBody final TopicDtoList topics) {
+    @PutMapping
+    public CompletableFuture<ResponseEntity<?>> prioritizeInterests(@Validated(CheckOrder.class) @RequestBody final TopicDtoList topics) {
 		val interests = topics.stream()
 						.map(t -> Interests.builder().followed(Topic.builder().name(t.getTopic()).build()).build())
 						.collect(toSet());

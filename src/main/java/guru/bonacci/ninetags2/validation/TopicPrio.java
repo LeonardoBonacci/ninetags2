@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface TopicPrio {
 
-    String message() default "Author is not allowed.";
+    String message() default "Topics.prio must be an ascending (order is irrelevant) non-interupted sequence.";
 
     Class<?>[] groups() default {};
 

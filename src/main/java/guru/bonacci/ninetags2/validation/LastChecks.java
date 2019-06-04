@@ -1,5 +1,5 @@
 package guru.bonacci.ninetags2.validation;
 
-public interface TopicChecks {
+public interface LastChecks {
 
 }
