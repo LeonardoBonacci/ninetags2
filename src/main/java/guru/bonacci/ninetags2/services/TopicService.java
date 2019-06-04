@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import guru.bonacci.ninetags2.domain.Interests;
 import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.repos.TopicRepository;
+import guru.bonacci.ninetags2.repos.UserRepository;
 import guru.bonacci.ninetags2.web.FakeSecurityContext;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TopicService {
 
+	private final UserRepository userRepo;
 	private final TopicRepository topicRepo;
 	private final FakeSecurityContext context;
 	
@@ -42,9 +44,10 @@ public class TopicService {
 	
 	@Transactional
 	public CompletableFuture<Void> prioritize(@NonNull final Set<Interests> interests) {
-//TODO		userRepo.findByNameIgnoreCase(context.getAuthentication()).ifPresent(follower -> {
-//			follower.addInterests(interests);
-//		});;
+		userRepo.findByNameIgnoreCase(context.getAuthentication()).ifPresent(user -> {
+			user.addInterests(interests.stream().map(i -> { i.setFollower(user); return i; }).toArray(Interests[]::new));
+			userRepo.save(user);
+		});;
 		
 		return CompletableFuture.completedFuture(null);
 	}}

@@ -37,4 +37,24 @@ public class Follows {
 	
 	@EndNode 
 	_User followed;
+	
+
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+ 
+        if (!(o instanceof Follows))
+            return false;
+ 
+        Follows other = (Follows) o;
+ 
+        return id != null &&
+               id.equals(other.getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
 }

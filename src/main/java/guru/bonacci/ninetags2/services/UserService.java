@@ -83,7 +83,7 @@ public class UserService {
 		_User follower = context.getTheUser();
 
 		topicRepo.findByNameIgnoreCase(followMe).ifPresent(followed -> {
-			follower.addInterests(followed);
+			follower.addTopics(followed);
 			userRepo.save(follower);
 		});	
 		return completedFuture(null);
@@ -95,7 +95,7 @@ public class UserService {
 		_User follower = context.getTheUser();
 
 		topicRepo.findByNameIgnoreCase(doNotfollowMe).ifPresent(unfollowed -> {
-			follower.deleteInterests(unfollowed);
+			follower.deleteTopics(unfollowed);
 			userRepo.save(follower);
 		});	
 		return completedFuture(null);

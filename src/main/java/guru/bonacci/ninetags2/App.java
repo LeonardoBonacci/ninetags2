@@ -81,7 +81,7 @@ public class App {
 			val nu = _User.builder().name("Nu").build();
 
 			alpha.addFollows(beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu);
-			alpha.addInterests(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports);
+			alpha.addTopics(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports);
 			beta.addFollows(gamma);
 			beta.addFollows(alpha);
 			userRepo.saveAll(asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));

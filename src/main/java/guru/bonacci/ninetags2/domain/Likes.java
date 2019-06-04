@@ -32,4 +32,24 @@ public class Likes {
 	
 	@EndNode 
 	Share share;
+	
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+ 
+        if (!(o instanceof Likes))
+            return false;
+ 
+        Likes other = (Likes) o;
+ 
+        return id != null &&
+               id.equals(other.getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
 }

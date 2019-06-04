@@ -32,4 +32,23 @@ public class SharedWith {
 	
 	@EndNode 
 	_User with;
+	
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+ 
+        if (!(o instanceof SharedWith))
+            return false;
+ 
+        SharedWith other = (SharedWith) o;
+ 
+        return id != null &&
+               id.equals(other.getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

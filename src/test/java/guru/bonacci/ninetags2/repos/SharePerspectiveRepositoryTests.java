@@ -59,11 +59,11 @@ public class SharePerspectiveRepositoryTests {
 		val notFollowed = _User.builder().name("Not followed").build();
 
 		alpha.addFollows(beta, gamma);
-		alpha.addInterests(cooking, play);
+		alpha.addTopics(cooking, play);
 		beta.addFollows(alpha);
-		beta.addInterests(cooking, story);
+		beta.addTopics(cooking, story);
 		gamma.addFollows(alpha, beta);
-		gamma.addInterests(cooking, story, play);
+		gamma.addTopics(cooking, story, play);
 		userRepo.saveAll(asList(alpha, beta, gamma, notFollowed));
 		
 		val s1 = Share.builder().title("On Cooking").by(alpha).about(singletonList(cooking)).build();

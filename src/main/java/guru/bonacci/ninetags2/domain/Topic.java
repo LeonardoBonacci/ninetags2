@@ -36,4 +36,23 @@ public class Topic {
 	public Topic(String name) {
 		this.name = name;
 	}
+	
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+ 
+        if (!(o instanceof Topic))
+            return false;
+ 
+        Topic other = (Topic) o;
+ 
+        return id != null &&
+               id.equals(other.getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

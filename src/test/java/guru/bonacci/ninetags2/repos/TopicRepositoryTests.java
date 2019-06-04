@@ -51,7 +51,7 @@ public class TopicRepositoryTests {
 		Topic dance = Topic.builder().name("Dance").build();
 		topicRepo.saveAll(Arrays.asList(culture, cultural, cultuurbarbaar, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports, dance));
 
-		alpha.addInterests(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports);
+		alpha.addTopics(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports);
 		userRepo.save(alpha);
 	}
 

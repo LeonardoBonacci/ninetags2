@@ -1,6 +1,12 @@
 package guru.bonacci.ninetags2.domain;
 
-import java.util.HashSet;
+import static java.util.Arrays.*;
+import static java.util.function.Function.*;
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
+
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
@@ -17,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import lombok.val;
 
 @Getter
 @Builder
@@ -36,13 +43,31 @@ public class _User {
 
 	@Relationship(type = "FOLLOWS")
 	@Builder.Default 
-	Set<Follows> follows = new HashSet<>();
+	Set<Follows> follows = newHashSet();
 
 	@Relationship(type = "INTERESTED_IN")
 	@Builder.Default 
-	Set<Interests> interests = new HashSet<>();
+	Set<Interests> interests = newHashSet();
 	
 
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+ 
+        if (!(o instanceof _User))
+            return false;
+ 
+        _User other = (_User) o;
+ 
+        return id != null &&
+               id.equals(other.getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+    
 	public void addFollows(@NonNull _User... followUs) {
 		for (_User followMe : followUs)
 			addFollows(followMe);
@@ -61,21 +86,25 @@ public class _User {
 		this.follows.removeIf(f -> f.getFollowed().getName().equals(doNotfollowMe.getName()));
 	}	
 
-	public void addInterests(@NonNull Topic... followUs) {
-		for (Topic followMe : followUs)
-			addInterest(followMe);
+	public void addInterests(@NonNull Interests... followUs) {
+		val mapByTopicName = interests.stream().collect(toMap(i -> i.getFollowed().getName(), identity()));
+		stream(followUs).forEach(f -> mapByTopicName.put(f.getFollowed().getName(), f));
+		interests = mapByTopicName.values().stream().collect(toSet());
 	}	
 
-	private void addInterest(@NonNull Topic followMe) {
+	public void addTopics(@NonNull Topic... followUs) {
+		stream(followUs).forEach(this::addTopic);
+	}	
+
+	private void addTopic(@NonNull Topic followMe) {
 		this.interests.add(Interests.builder().follower(this).followed(followMe).prio(this.interests.size()).build());
 	}	
 	
-	public void deleteInterests(@NonNull Topic... doNotfollowUs) {
-		for (Topic doNotFollowMe : doNotfollowUs)
-			deleteInterest(doNotFollowMe);
+	public void deleteTopics(@NonNull Topic... doNotfollowUs) {
+		stream(doNotfollowUs).forEach(this::deleteTopic);
 	}	
 
-	private void deleteInterest(@NonNull Topic doNotfollowMe) {
+	private void deleteTopic(@NonNull Topic doNotfollowMe) {
 		this.interests.removeIf(i -> i.getFollowed().getName().equals(doNotfollowMe.getName()));
 	}	
 }

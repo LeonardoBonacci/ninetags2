@@ -33,7 +33,7 @@ public class Interests {
 	Integer prio;
 
 	@StartNode 
-	_User  follower;
+	_User follower;
 	
 	@EndNode 
 	Topic followed;

@@ -46,4 +46,23 @@ public class Share {
 	@Relationship(type = "IS_ABOUT")
 	@Builder.Default 
 	List<Topic> about = new ArrayList<>();
+	
+	
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+ 
+        if (!(o instanceof Share))
+            return false;
+ 
+        Share other = (Share) o;
+ 
+        return id != null &&
+               id.equals(other.getId());
+    }
+ 
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

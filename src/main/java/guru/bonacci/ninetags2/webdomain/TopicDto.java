@@ -6,10 +6,13 @@ import javax.validation.constraints.Positive;
 
 import guru.bonacci.ninetags2.validation.FirstChecks;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Setter @Getter
+@EqualsAndHashCode(of = "topic")
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopicDto {

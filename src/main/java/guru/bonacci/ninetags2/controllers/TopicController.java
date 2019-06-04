@@ -50,10 +50,10 @@ public class TopicController {
 
 	
 	@ApiOperation(value = "updates the topic-order")
-    @PutMapping
+    @PutMapping("/prio")
     public CompletableFuture<ResponseEntity<?>> prioritizeInterests(@Validated(CheckOrder.class) @RequestBody final TopicDtoList topics) {
 		val interests = topics.stream()
-						.map(t -> Interests.builder().followed(Topic.builder().name(t.getTopic()).build()).build())
+						.map(t -> Interests.builder().followed(new Topic(t.getTopic())).prio(t.getPrio()).build())
 						.collect(toSet());
 		
 		return topicService.prioritize(interests)
