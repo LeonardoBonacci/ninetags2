@@ -27,7 +27,7 @@ public class WebCrawlEventHandler {
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void handleShareCreatedEvent(@NonNull CreationEvent<Share> creationEvent) {
 		Share created = creationEvent.getSource();
-		created.setTotal(crawl(created.getUrl()));
+		created.setCrawl(crawl(created.getUrl()));
 		shareRepo.save(created);
 	}
 	

@@ -129,7 +129,6 @@ public class App {
 			likesRepo.saveAll(asList(lartl,lart2,lart3,lart4,ldance,ldance2,ldance3,lgame,lgame2,lgame3,lpoetry,lpoetry2,llit));
 			
 			ftRepo.init();
-			ftRepo.search("title:cultue OR description:culte OR total:cultture~0.7").get().forEach(System.out::println);
 		};
 	}
 }

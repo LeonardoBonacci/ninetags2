@@ -4,9 +4,6 @@ import static com.google.common.collect.Sets.newHashSet;
 
 import java.util.Set;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.URL;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.Index;
@@ -41,14 +38,14 @@ public class Share {
 	String description;
 
     @ApiModelProperty(notes = "total web text")
-	String total;
+    @JsonIgnore
+    String crawl;
 
     @JsonIgnore
 	@CreatedDate
 	Long time;
 
     @ApiModelProperty(notes = "url pointing to the content")
-    @NotNull @URL
     String url;
 
 	@Relationship(type = "SHARED", direction=Relationship.INCOMING)

@@ -3,6 +3,7 @@ package guru.bonacci.ninetags2.webdomain;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.URL;
@@ -19,7 +20,9 @@ public class ShareDto {
 	@NotBlank
 	private String title;
 
-    @URL
+	private String description;
+
+    @NotNull @URL
 	public String url;
 
     @Size(min = 1, max = 9)
