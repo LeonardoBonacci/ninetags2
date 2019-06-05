@@ -1,1 +1,10 @@
-> recommendations
+> personalized pagerank - for user recommendations
+-- directed, weighted
+weight a normalized version of the user dashboard follows.prio
+
+> closeness centrality algorithm with cypher projection (depth=n subgraph) - for topic recommendations
+-- undirected, unweighted
+    Only with cypher projection
+
+https://neo4j.com/docs/graph-algorithms/current/algorithms/closeness-centrality/
+https://neo4j.com/docs/graph-algorithms/current/projected-graph-model/cypher-projection/
