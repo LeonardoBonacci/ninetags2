@@ -20,13 +20,13 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ShareEventHandler {
+public class TopicRelationEventHandler {
 
 	private final RelatesToRepository relatesToRepo;
 	
 	@Async
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void handleOrderCreatedEvent(@NonNull CreationEvent<Share> creationEvent) {
+	public void handleShareCreatedEvent(@NonNull CreationEvent<Share> creationEvent) {
 		Share s = creationEvent.getSource();
 
 		if (s.getAbout().size() < 2) return;

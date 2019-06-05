@@ -106,7 +106,7 @@ public class App {
 			val sdance = Share.builder().title("On Dance").description("On culture and cooking").by(gamma).about(Sets.newHashSet(art, game)).build();
 			val ssports = Share.builder().title("On Sports").description("On culture and cooking").by(zeta).about(Sets.newHashSet(game)).build();
 			shareRepo.saveAll(asList(sculture, scooking, shobbies, sliterature, sart, sart2, sentertainment, sfiction, sgame, spoetry, ssports, sdance));
-
+			
 			val swculture = SharedWith.builder().share(sculture).with(alpha).build();
 			val swcooking = SharedWith.builder().share(scooking).with(alpha).build();
 			val swhobbies = SharedWith.builder().share(shobbies).with(alpha).build();
@@ -129,7 +129,7 @@ public class App {
 			likesRepo.saveAll(asList(lartl,lart2,lart3,lart4,ldance,ldance2,ldance3,lgame,lgame2,lgame3,lpoetry,lpoetry2,llit));
 			
 			ftRepo.init();
-			ftRepo.search("title:culture OR description:culture").get().forEach(System.out::println);
+			ftRepo.search("title:cultue OR description:culte OR total:cultture~0.7").get().forEach(System.out::println);
 		};
 	}
 }

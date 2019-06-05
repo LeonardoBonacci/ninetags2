@@ -14,7 +14,7 @@ import guru.bonacci.ninetags2.domain.Share;
 public interface FullTextSearchRepo extends Neo4jRepository<Share, Long> {
 
 
-	@Query(value = "CALL db.index.fulltext.createNodeIndex('shares', ['Share'], ['title', 'description']) ",
+	@Query(value = "CALL db.index.fulltext.createNodeIndex('shares', ['Share'], ['title', 'description', 'total']) ",
 			countQuery = "RETURN COUNT(0) " )
 	void init();
 

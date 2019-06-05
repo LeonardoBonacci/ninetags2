@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.Topic;
+import guru.bonacci.ninetags2.services.FullTextService;
 import guru.bonacci.ninetags2.services.ShareService;
 import guru.bonacci.ninetags2.webdomain.DirectedShareDto;
 import guru.bonacci.ninetags2.webdomain.ForShareDto;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class ShareController {
 
 	private final ShareService service;
+	private final FullTextService ftService;
 
 	
 	@ApiOperation(value = "For testing purposes, find by title 'like'")
@@ -47,7 +49,15 @@ public class ShareController {
 					.exceptionally(handleFailure);
 	}
 
-	
+
+	@ApiOperation(value = "Full text search")
+	@GetMapping("/search/{searchQuery}")
+	public CompletableFuture<ResponseEntity<?>> search(@PathVariable("searchQuery") final String searchQuery) {
+		return ftService.search(searchQuery)
+					.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+					.exceptionally(handleFailure);
+	}
+
 	// curl -X POST -H 'Dear-User: Alpha' -H 'Content-Type: application/json' -i
 	// http://localhost:8080/shares/ --data
 	// '{"title":"anothertitle","url":"https://www.encyclo.nl/begrip/bla","topics":["Foo","Another

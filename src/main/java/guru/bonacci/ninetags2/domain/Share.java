@@ -34,8 +34,11 @@ public class Share {
 	@Index(unique = true) 
 	String title;
 
-    @ApiModelProperty(notes = "whatever it is named by the user")
+    @ApiModelProperty(notes = "however it is described by the user")
 	String description;
+
+    @ApiModelProperty(notes = "total web text")
+	String total;
 
     @JsonIgnore
 	@CreatedDate
