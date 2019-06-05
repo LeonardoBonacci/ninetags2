@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.Topic;
+import guru.bonacci.ninetags2.services.FullTextService;
 import guru.bonacci.ninetags2.services.ShareService;
 import guru.bonacci.ninetags2.webdomain.DirectedShareDto;
 import guru.bonacci.ninetags2.webdomain.ForShareDto;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class ShareController {
 
 	private final ShareService service;
+	private final FullTextService ftService;
 
 	
 	@ApiOperation(value = "For testing purposes, find by title 'like'")
@@ -47,7 +49,16 @@ public class ShareController {
 					.exceptionally(handleFailure);
 	}
 
+
+	@ApiOperation(value = "Full text search")
+	@GetMapping("/search/{searchQuery}")
+	public CompletableFuture<ResponseEntity<?>> search(@PathVariable("searchQuery") final String searchQuery) {
+		return ftService.search(searchQuery)
+					.<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+					.exceptionally(handleFailure);
+	}
 	
+
 	// curl -X POST -H 'Dear-User: Alpha' -H 'Content-Type: application/json' -i
 	// http://localhost:8080/shares/ --data
 	// '{"title":"anothertitle","url":"https://www.encyclo.nl/begrip/bla","topics":["Foo","Another
@@ -55,7 +66,9 @@ public class ShareController {
 	@ApiOperation(value = "Saves share connected to tags and user. Adds non-existing topics")
 	@PostMapping
 	public CompletableFuture<ResponseEntity<?>> insert(@Valid @RequestBody final ShareDto share) {
-		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl());
+		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle())
+														.description(share.getDescription())
+														.url(share.getUrl());
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 
 		return service.insert(shareBuilder, topics)
@@ -71,7 +84,9 @@ public class ShareController {
 	@ApiOperation(value = "Saves private share. Adds non-existing topics.")
 	@PostMapping("/private")
 	public CompletableFuture<ResponseEntity<?>> insertPrivate(@Valid @RequestBody final ShareDto share) {
-		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl());
+		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle())
+														.description(share.getDescription())
+														.url(share.getUrl());
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 
 		return service.insertPrivate(shareBuilder, topics)
@@ -87,7 +102,9 @@ public class ShareController {
 	@ApiOperation(value = "Directed share: send to users (can include oneself -> that will become a private share)")
 	@PostMapping("/directed")
 	public CompletableFuture<ResponseEntity<?>> insertDirected(@Valid @RequestBody final DirectedShareDto share) {
-		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl());
+		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle())
+														.description(share.getDescription())
+														.url(share.getUrl());
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 
 		return service.insertDirected(shareBuilder, topics, share.getUsers())
@@ -122,7 +139,9 @@ public class ShareController {
 	@ApiOperation(value = "Update share")
 	@PutMapping("/{id}")
 	public CompletableFuture<ResponseEntity<?>> update(@PathVariable("id") final Long id, @Valid @RequestBody final ShareDto share) {
-		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle()).url(share.getUrl()).id(id);
+		Share.ShareBuilder shareBuilder = Share.builder().title(share.getTitle())
+														.description(share.getDescription())
+														.url(share.getUrl());
 		List<Topic> topics = share.getTopics().stream().map(t -> Topic.builder().name(t).build()).collect(toList());
 
 		return service.update(shareBuilder, topics)

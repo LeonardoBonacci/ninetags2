@@ -2,20 +2,22 @@ package guru.bonacci.ninetags2;
 
 import static java.util.Arrays.asList;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
+import org.neo4j.ogm.session.Session;
+import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import com.google.common.collect.Sets;
+
 import guru.bonacci.ninetags2.domain.Likes;
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.SharedWith;
 import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.domain._User;
+import guru.bonacci.ninetags2.repos.FullTextSearchRepo;
 import guru.bonacci.ninetags2.repos.LikesRepository;
 import guru.bonacci.ninetags2.repos.ShareRepository;
 import guru.bonacci.ninetags2.repos.SharedWithRepository;
@@ -45,13 +47,16 @@ public class App {
 							TopicRepository topicRepo, 
 							ShareRepository shareRepo, 
 							SharedWithRepository sharedWithRepo,
-							LikesRepository likesRepo) {
+							LikesRepository likesRepo,
+							FullTextSearchRepo ftRepo,
+							SessionFactory sessionFactory) {
 		return args -> {
-			userRepo.deleteAll();
-			topicRepo.deleteAll();
-			shareRepo.deleteAll();
-			sharedWithRepo.deleteAll();
-			likesRepo.deleteAll();
+			Session session = sessionFactory.openSession();
+			try {
+				session.purgeDatabase();
+				ftRepo.clean();
+			} catch (RuntimeException ignore) {}
+			
 			
 			val culture = Topic.builder().name("Culture").build();
 			val cooking = Topic.builder().name("Cooking").build();
@@ -87,21 +92,21 @@ public class App {
 			beta.addFollows(alpha);
 			userRepo.saveAll(asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
 
-			val sculture = Share.builder().title("Culture").by(alpha).build();
-			val scooking = Share.builder().title("Cooking").by(alpha).build();
-			val shobbies = Share.builder().title("Hobbies").by(alpha).build();
-			val sliterature = Share.builder().title("Literature").by(alpha).build();
-			val sentertainment = Share.builder().title("On Entertainment").by(alpha).build();
-			val sfiction = Share.builder().title("On Fiction").by(alpha).build();
-			val sgame = Share.builder().title("On Game").by(alpha).build();
-			val spoetry = Share.builder().title("On Poetry").by(alpha).build();
+			val sculture = Share.builder().title("Culture").description("On culture and cooking").by(alpha).build();
+			val scooking = Share.builder().title("Cooking").description("On culture and cooking").by(alpha).build();
+			val shobbies = Share.builder().title("Hobbies").description("On culture and cooking").by(alpha).build();
+			val sliterature = Share.builder().title("Literature").description("On culture and cooking").by(alpha).build();
+			val sentertainment = Share.builder().title("On Entertainment").description("On culture and cooking").by(alpha).build();
+			val sfiction = Share.builder().title("On Fiction").description("On culture and cooking").by(alpha).build();
+			val sgame = Share.builder().title("On Game").description("On culture and cooking").by(alpha).build();
+			val spoetry = Share.builder().title("On Poetry").description("On culture and cooking").by(alpha).build();
 
-			val sart = Share.builder().title("On Art").by(beta).about(new HashSet<>(Arrays.asList(art, game))).build();
-			val sart2 = Share.builder().title("On Art 2").by(beta).about(new HashSet<>(Arrays.asList(art, game))).build();
-			val sdance = Share.builder().title("On Dance").by(gamma).about(new HashSet<>(Arrays.asList(art, game))).build();
-			val ssports = Share.builder().title("On Sports").by(zeta).about(new HashSet<>(Arrays.asList(game))).build();
+			val sart = Share.builder().title("On Art").description("On culture and cooking").by(beta).about(Sets.newHashSet(art, game)).build();
+			val sart2 = Share.builder().title("On Art 2").description("On culture and cooking").by(beta).about(Sets.newHashSet(art, game)).build();
+			val sdance = Share.builder().title("On Dance").description("On culture and cooking").by(gamma).about(Sets.newHashSet(art, game)).build();
+			val ssports = Share.builder().title("On Sports").description("On culture and cooking").by(zeta).about(Sets.newHashSet(game)).build();
 			shareRepo.saveAll(asList(sculture, scooking, shobbies, sliterature, sart, sart2, sentertainment, sfiction, sgame, spoetry, ssports, sdance));
-
+			
 			val swculture = SharedWith.builder().share(sculture).with(alpha).build();
 			val swcooking = SharedWith.builder().share(scooking).with(alpha).build();
 			val swhobbies = SharedWith.builder().share(shobbies).with(alpha).build();
@@ -122,6 +127,8 @@ public class App {
 			val lpoetry2 = Likes.builder().user(mu).share(spoetry).build();
 			val llit = Likes.builder().user(mu).share(sliterature).build();
 			likesRepo.saveAll(asList(lartl,lart2,lart3,lart4,ldance,ldance2,ldance3,lgame,lgame2,lgame3,lpoetry,lpoetry2,llit));
+			
+			ftRepo.init();
 		};
 	}
 }

@@ -34,6 +34,13 @@ public class Share {
 	@Index(unique = true) 
 	String title;
 
+    @ApiModelProperty(notes = "however it is described by the user")
+	String description;
+
+    @ApiModelProperty(notes = "total web text")
+    @JsonIgnore
+    String crawl;
+
     @JsonIgnore
 	@CreatedDate
 	Long time;
