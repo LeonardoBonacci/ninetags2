@@ -19,9 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FullTextService {
 
+	private final static String Q = "title:%1$s^10 OR description:%1$s^5 OR total:%1$s";
+
 	private final FullTextSearchRepo ftRepo;
 
-	private final static String Q = "title:%1$s OR description:%1$s OR total:%1$s";
+	
 	@Transactional(readOnly = true)
 	public CompletableFuture<List<Share>> search(@NonNull String searchQuery) {
 		val shares = ftRepo.search(String.format(Q, searchQuery));
