@@ -86,10 +86,15 @@ public class App {
 			val mu = _User.builder().name("Mu").build();
 			val nu = _User.builder().name("Nu").build();
 
-			alpha.addFollows(beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu);
+			alpha.addFollows(beta, gamma, delta, epsilon);
 			alpha.addTopics(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports);
 			beta.addFollows(gamma);
 			beta.addFollows(alpha);
+			gamma.addFollows(beta, alpha, epsilon, zeta, lambda);
+			delta.addFollows(zeta, theta, iota);
+			zeta.addFollows(epsilon, mu, nu, alpha, gamma);
+			theta.addFollows(alpha, beta, gamma);
+			iota.addFollows(lambda);
 			userRepo.saveAll(asList(alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa, lambda, mu, nu));
 
 			val sculture = Share.builder().title("Culture").description("On culture and cooking").by(alpha).build();

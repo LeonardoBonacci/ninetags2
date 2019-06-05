@@ -126,4 +126,12 @@ public class UserService {
 		val hotties = userRepo.getMostLikedUsersToday(pageRequest);
 		return hotties.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("found hot user " + result)));
 	}
+	
+
+	@Transactional(readOnly = true)
+	public CompletableFuture<List<_User>> recommend() {
+		val recommendations = userRepo.recommendUsersToFollow(context.getAuthentication());
+		return recommendations.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("recommend user " + result)));
+	}
+
 }

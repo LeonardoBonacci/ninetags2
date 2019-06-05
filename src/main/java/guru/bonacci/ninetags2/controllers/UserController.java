@@ -80,4 +80,11 @@ public class UserController {
 		return userService.prioritize(follows).<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 				.exceptionally(handleFailure);
 	}
+	
+    @GetMapping("/recommend")
+    public CompletableFuture<ResponseEntity<?>> recommend() {
+		return userService.recommend()
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
+    }
 }

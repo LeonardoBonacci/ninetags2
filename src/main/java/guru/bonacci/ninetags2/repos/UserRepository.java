@@ -53,4 +53,15 @@ public interface UserRepository extends Neo4jRepository<_User, Long> {
 				"ORDER BY nrLikes DESC ",
 		   countQuery = "RETURN COUNT(0) " )
 	CompletableFuture<Page<_User>> getMostLikedUsersToday(Pageable pageRequest);
+	
+	
+	@Query( "MATCH (user:User {name: {name}}) " + 
+			"CALL algo.pageRank.stream('User', 'FOLLOWS', {iterations:20, dampingFactor:0.85, sourceNodes: [user]}) " +
+			"YIELD nodeId, score " +
+			"WITH algo.asNode(nodeId) AS u, score " +
+			"WHERE NOT(EXISTS((user)-[:FOLLOWS]->(u))) AND u.name <> {name} " +
+			"RETURN u " + 
+			"ORDER BY score DESC ")
+	CompletableFuture<List<_User>> recommendUsersToFollow(@Param("name") String name);
+
 }

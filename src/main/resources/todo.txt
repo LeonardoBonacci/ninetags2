@@ -1,6 +1,5 @@
 > personalized pagerank - for user recommendations
 -- directed, unweighted
-weight a normalized version of the user dashboard follows.prio
 
 https://neo4j.com/docs/graph-algorithms/current/algorithms/page-rank/
 
