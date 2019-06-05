@@ -34,6 +34,9 @@ public class Share {
 	@Index(unique = true) 
 	String title;
 
+    @ApiModelProperty(notes = "whatever it is named by the user")
+	String description;
+
     @JsonIgnore
 	@CreatedDate
 	Long time;
