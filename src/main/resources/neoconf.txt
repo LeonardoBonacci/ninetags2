@@ -1,12 +1,10 @@
- Comma separated list of JAX-RS packages containing JAX-RS resources, one
+# Comma separated list of JAX-RS packages containing JAX-RS resources, one
 # package name for each mountpoint. The listed package names will be loaded
 # under the mountpoints specified. Uncomment this line to mount the
 # org.neo4j.examples.server.unmanaged.HelloWorldResource.java from
 # neo4j-server-examples under /examples/unmanaged, resulting in a final URL of
 # http://localhost:7474/examples/unmanaged/helloworld/{nodeId}
-#dbms.unmanaged_extension_classes=org.neo4j.examples.server.unmanaged=/examples/unmanaged
 dbms.unmanaged_extension_classes=com.graphaware.server=/graphaware
-
 
 # Runtime must be enabled like this
 com.graphaware.runtime.enabled=true
@@ -33,8 +31,10 @@ db.temporal.timezone=+02:00
 # Optionally, a relationship direction (from the tree's point of view), with which the events will be attached to the tree can be specified (defaults to INCOMING)
 com.graphaware.module.TT.direction=INCOMING
 
-
 # A comma separated list of procedures and user defined functions that are allowed
 # full access to the database through unsupported/insecure internal APIs.
-#dbms.security.procedures.unrestricted=my.extensions.example,my.procedures.*
-dbms.security.procedures.unrestricted=ga.timetree.*
+dbms.security.procedures.unrestricted=ga.timetree.*,apoc.*,algo.*
+
+# A comma separated list of procedures to be loaded by default.
+# Leaving this unconfigured will load all procedures found.
+dbms.security.procedures.whitelist=apoc.coll.*,apoc.load.*,algo.*

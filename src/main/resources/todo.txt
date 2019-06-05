@@ -1,6 +1,8 @@
 > personalized pagerank - for user recommendations
--- directed, weighted
+-- directed, unweighted
 weight a normalized version of the user dashboard follows.prio
+
+https://neo4j.com/docs/graph-algorithms/current/algorithms/page-rank/
 
 > closeness centrality algorithm with cypher projection (depth=n subgraph) - for topic recommendations
 -- undirected, unweighted
