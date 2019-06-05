@@ -1,2 +1,1 @@
-> load script
-> full text search
+> recommendations
