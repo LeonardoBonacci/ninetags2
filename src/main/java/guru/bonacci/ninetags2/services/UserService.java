@@ -133,5 +133,4 @@ public class UserService {
 		val recommendations = userRepo.recommendUsersToFollow(context.getAuthentication());
 		return recommendations.whenComplete((results, ex) -> results.stream().forEach(result -> log.info("recommend user " + result)));
 	}
-
 }

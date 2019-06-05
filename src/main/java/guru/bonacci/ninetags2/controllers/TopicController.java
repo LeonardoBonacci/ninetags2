@@ -64,6 +64,7 @@ public class TopicController {
 				.exceptionally(handleFailure);
     }
 	
+	
 	@ApiOperation(value = "updates the topic/interests-order")
     @PutMapping("/prio")
     public CompletableFuture<ResponseEntity<?>> prioritizeInterests(@Validated(CheckOrder.class) @RequestBody final TopicDtoList topics) {
@@ -72,6 +73,14 @@ public class TopicController {
 						.collect(toSet());
 		
 		return topicService.prioritize(interests)
+		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
+		        .exceptionally(handleFailure);
+    }
+	
+	
+    @GetMapping("/recommend")
+    public CompletableFuture<ResponseEntity<?>> recommend() {
+		return topicService.recommend()
 		        .<ResponseEntity<?>>thenApply(ResponseEntity::ok)
 		        .exceptionally(handleFailure);
     }

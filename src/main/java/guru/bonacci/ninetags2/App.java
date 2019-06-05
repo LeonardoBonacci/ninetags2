@@ -13,12 +13,14 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import com.google.common.collect.Sets;
 
 import guru.bonacci.ninetags2.domain.Likes;
+import guru.bonacci.ninetags2.domain.RelatesTo;
 import guru.bonacci.ninetags2.domain.Share;
 import guru.bonacci.ninetags2.domain.SharedWith;
 import guru.bonacci.ninetags2.domain.Topic;
 import guru.bonacci.ninetags2.domain._User;
 import guru.bonacci.ninetags2.repos.FullTextSearchRepo;
 import guru.bonacci.ninetags2.repos.LikesRepository;
+import guru.bonacci.ninetags2.repos.RelatesToRepository;
 import guru.bonacci.ninetags2.repos.ShareRepository;
 import guru.bonacci.ninetags2.repos.SharedWithRepository;
 import guru.bonacci.ninetags2.repos.TopicRepository;
@@ -48,6 +50,7 @@ public class App {
 							ShareRepository shareRepo, 
 							SharedWithRepository sharedWithRepo,
 							LikesRepository likesRepo,
+							RelatesToRepository relatesToRepo,
 							FullTextSearchRepo ftRepo,
 							SessionFactory sessionFactory) {
 		return args -> {
@@ -70,7 +73,20 @@ public class App {
 			val sports = Topic.builder().name("Sports").build();
 			val dance = Topic.builder().name("Dance").build();
 			topicRepo.saveAll(asList(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports, dance));
-
+	
+			RelatesTo r1 = RelatesTo.builder().from(fiction).to(sports).build();	
+			RelatesTo r2 = RelatesTo.builder().from(fiction).to(entertainment).build();	
+			RelatesTo r3 = RelatesTo.builder().from(entertainment).to(sports).build();	
+			RelatesTo r4 = RelatesTo.builder().from(art).to(sports).build();	
+			RelatesTo r5 = RelatesTo.builder().from(art).to(entertainment).build();	
+			RelatesTo r6 = RelatesTo.builder().from(game).to(poetry).build();	
+			RelatesTo r7 = RelatesTo.builder().from(fiction).to(dance).build();	
+			RelatesTo r8 = RelatesTo.builder().from(fiction).to(hobbies).build();	
+			RelatesTo r9 = RelatesTo.builder().from(fiction).to(culture).build();	
+			RelatesTo r10 = RelatesTo.builder().from(cooking).to(sports).build();	
+			RelatesTo r11 = RelatesTo.builder().from(fiction).to(cooking).build();	
+			RelatesTo r12 = RelatesTo.builder().from(cooking).to(literature).build();	
+			relatesToRepo.saveAll(asList(r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12));
 			
 			val alpha = _User.builder().name("Alpha").build();
 			val beta = _User.builder().name("Beta").build();
@@ -87,7 +103,7 @@ public class App {
 			val nu = _User.builder().name("Nu").build();
 
 			alpha.addFollows(beta, gamma, delta, epsilon);
-			alpha.addTopics(culture, cooking, hobbies, literature, art, entertainment, fiction, game, poetry, sports);
+			alpha.addTopics(culture, cooking, hobbies, literature);
 			beta.addFollows(gamma);
 			beta.addFollows(alpha);
 			gamma.addFollows(beta, alpha, epsilon, zeta, lambda);

@@ -48,4 +48,15 @@ public interface TopicRepository extends Neo4jRepository<Topic, Long> {
 			"ORDER BY nrLikes DESC ",
 		   countQuery = "RETURN COUNT(0) " )
 	CompletableFuture<Page<Topic>> getMostLikedTopicsToday(Pageable pageRequest);
+	
+
+	// this was to be done with cypher projection if escaping special characters would not be such a pain...
+	@Query( "CALL algo.closeness.harmonic.stream('Topic', 'RELATES_TO') " + 
+			"YIELD nodeId, centrality " +
+			"WITH algo.asNode(nodeId) AS t, centrality " +
+			"MATCH (:User {name:{name}})-[:INTERESTED_IN]->(already:Topic)-[:RELATES_TO*1..3]->(t) " +
+			"WHERE already <> t " +
+			"RETURN t " + 
+			"ORDER BY centrality DESC ")
+	CompletableFuture<List<Topic>> recommendTopicsToFollow(@Param("name") String name);
 }

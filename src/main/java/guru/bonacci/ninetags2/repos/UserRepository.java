@@ -63,5 +63,4 @@ public interface UserRepository extends Neo4jRepository<_User, Long> {
 			"RETURN u " + 
 			"ORDER BY score DESC ")
 	CompletableFuture<List<_User>> recommendUsersToFollow(@Param("name") String name);
-
 }
