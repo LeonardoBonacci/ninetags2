@@ -1,13 +1,7 @@
 package guru.bonacci.ninetags2.domain;
 
-import javax.validation.constraints.NotBlank;
-
-import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,19 +18,9 @@ import lombok.ToString;
 public class Topic {
 
 	
-	@Id @GeneratedValue
-	@JsonIgnore
-	Long id;
-	
-	@Index(unique = true) 
-	@NotBlank
+	@Id
 	String name;
-	
 
-	public Topic(String name) {
-		this.name = name;
-	}
-	
 	
 	@Override
     public boolean equals(Object o) {
@@ -47,8 +31,8 @@ public class Topic {
  
         Topic other = (Topic) o;
  
-        return id != null &&
-               id.equals(other.getId());
+        return name != null &&
+               name.equals(other.getName());
     }
  
     @Override

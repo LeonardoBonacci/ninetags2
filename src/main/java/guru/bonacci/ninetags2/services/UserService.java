@@ -38,7 +38,7 @@ public class UserService {
 		if (!name.equalsIgnoreCase(context.getAuthentication()))
 			throw new AuthorizationViolationException("No permission..");
 		
-		val user = userRepo.findByNameIgnoreCase(name);
+		val user = userRepo.findById(name);
 		return CompletableFuture.completedFuture(user);
 	}
 
@@ -68,7 +68,7 @@ public class UserService {
 	public CompletableFuture<Void> follows(final String followMe) {
 		_User follower = context.getTheUser();
 
-		userRepo.findByNameIgnoreCase(followMe).ifPresent(followed -> {
+		userRepo.findById(followMe).ifPresent(followed -> {
 			follower.addFollows(followed);
 			userRepo.save(follower);
 		});
@@ -80,7 +80,7 @@ public class UserService {
 	public CompletableFuture<Void> unfollows(final String doNotfollowMe) {
 		_User follower = context.getTheUser();
 
-		userRepo.findByNameIgnoreCase(doNotfollowMe).ifPresent(unfollowed -> {
+		userRepo.findById(doNotfollowMe).ifPresent(unfollowed -> {
 			follower.deleteFollows(unfollowed);
 			userRepo.save(follower);
 		});	
@@ -92,7 +92,7 @@ public class UserService {
 	public CompletableFuture<Void> interests(final String followMe) {
 		_User follower = context.getTheUser();
 
-		topicRepo.findByNameIgnoreCase(followMe).ifPresent(followed -> {
+		topicRepo.findById(followMe).ifPresent(followed -> {
 			follower.addTopics(followed);
 			userRepo.save(follower);
 		});	
@@ -104,7 +104,7 @@ public class UserService {
 	public CompletableFuture<Void> uninterests(final String doNotfollowMe) {
 		_User follower = context.getTheUser();
 
-		topicRepo.findByNameIgnoreCase(doNotfollowMe).ifPresent(unfollowed -> {
+		topicRepo.findById(doNotfollowMe).ifPresent(unfollowed -> {
 			follower.deleteTopics(unfollowed);
 			userRepo.save(follower);
 		});	
@@ -113,7 +113,7 @@ public class UserService {
 	
 	@Transactional
 	public CompletableFuture<Void> prioritize(@NonNull final Set<Follows> follows) {
-		userRepo.findByNameIgnoreCase(context.getAuthentication()).ifPresent(user -> {
+		userRepo.findById(context.getAuthentication()).ifPresent(user -> {
 			user.addFollows(follows.stream().map(f -> { f.setFollower(user); return f; }).toArray(Follows[]::new));
 			userRepo.save(user);
 		});;

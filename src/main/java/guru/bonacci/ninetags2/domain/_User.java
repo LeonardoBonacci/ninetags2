@@ -1,19 +1,14 @@
 package guru.bonacci.ninetags2.domain;
 
-import static java.util.Arrays.*;
-import static java.util.function.Function.*;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Arrays.stream;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Set;
 
-import javax.validation.constraints.NotBlank;
-
-import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -34,11 +29,7 @@ import lombok.val;
 public class _User {
 
 	
-	@Id @GeneratedValue
-	Long id;
-	
-	@Index(unique = true) 
-	@NotBlank
+	@Id 
 	String name;
 
 	@Relationship(type = "FOLLOWS")
@@ -64,8 +55,8 @@ public class _User {
  
         _User other = (_User) o;
  
-        return id != null &&
-               id.equals(other.getId());
+        return name != null &&
+               name.equals(other.getName());
     }
  
     @Override

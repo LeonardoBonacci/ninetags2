@@ -51,13 +51,6 @@ public class UserRepositoryTests {
 	}
 
 	@Test
-	public void testFindByName() throws InterruptedException, ExecutionException {
-		String name = "Alpha";
-		_User result = repo.findByNameIgnoreCase(name).get();
-		assertNotNull(result);
-	}
-
-	@Test
 	public void testFindAllByName() throws InterruptedException, ExecutionException {
 		List<_User> results = repo.findByNameIn(Arrays.asList("Alpha", "Beta"));
 		assertNotNull(results);

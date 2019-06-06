@@ -24,7 +24,7 @@ public class FakeSecurityContext {
 
 	public _User getTheUser() {
 		try {
-			return userRepo.findByNameIgnoreCase(authentication).get();
+			return userRepo.findById(authentication).get();
 		} catch (NoSuchElementException e) {
 			e.printStackTrace();
 			throw new AuthorizationViolationException("No permission..");

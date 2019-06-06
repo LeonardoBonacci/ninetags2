@@ -1,7 +1,6 @@
 package guru.bonacci.ninetags2.repos;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.data.domain.Page;
@@ -14,10 +13,7 @@ import org.springframework.stereotype.Repository;
 import guru.bonacci.ninetags2.domain.Topic;
 
 @Repository
-public interface TopicRepository extends Neo4jRepository<Topic, Long> {
-
-
-	Optional<Topic> findByNameIgnoreCase(String name);
+public interface TopicRepository extends Neo4jRepository<Topic, String> {
 
 
 	CompletableFuture<List<Topic>> findByNameContaining(String name);
@@ -54,7 +50,7 @@ public interface TopicRepository extends Neo4jRepository<Topic, Long> {
 	@Query( "CALL algo.closeness.harmonic.stream('Topic', 'RELATES_TO') " + 
 			"YIELD nodeId, centrality " +
 			"WITH algo.asNode(nodeId) AS t, centrality " +
-			"MATCH (:User {name:{name}})-[:INTERESTED_IN]->(already:Topic)-[:RELATES_TO*1..3]->(t) " +
+			"MATCH (:User {name:{name}})-[:INTERESTED_IN]->(already:Topic)-[:RELATES_TO*1..4]-(t) " +
 			"WHERE already <> t " +
 			"RETURN t " + 
 			"ORDER BY centrality DESC ")

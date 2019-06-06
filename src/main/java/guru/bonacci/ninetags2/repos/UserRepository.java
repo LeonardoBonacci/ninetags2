@@ -1,7 +1,6 @@
 package guru.bonacci.ninetags2.repos;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.data.domain.Page;
@@ -14,12 +13,9 @@ import org.springframework.stereotype.Repository;
 import guru.bonacci.ninetags2.domain._User;
 
 @Repository
-public interface UserRepository extends Neo4jRepository<_User, Long> {
+public interface UserRepository extends Neo4jRepository<_User, String> {
 
 
-	Optional<_User> findByNameIgnoreCase(String name);
-
-	
 	List<_User> findByNameIn(List<String> name);
 
 	

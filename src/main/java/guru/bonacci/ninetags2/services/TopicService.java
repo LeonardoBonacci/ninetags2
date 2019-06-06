@@ -52,7 +52,7 @@ public class TopicService {
 	
 	@Transactional
 	public CompletableFuture<Void> prioritize(@NonNull final Set<Interests> interests) {
-		userRepo.findByNameIgnoreCase(context.getAuthentication()).ifPresent(user -> {
+		userRepo.findById(context.getAuthentication()).ifPresent(user -> {
 			user.addInterests(interests.stream().map(i -> { i.setFollower(user); return i; }).toArray(Interests[]::new));
 			userRepo.save(user);
 		});;
